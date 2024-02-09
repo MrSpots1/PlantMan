@@ -18,6 +18,6 @@ public class Death : MonoBehaviour
     }
     void Update()
     {
-        _ded = false;
+        _ded = false; // you died
     }
 }
