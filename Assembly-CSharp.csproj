@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{D949CFA9-848D-4997-6C9C-26252E8EC964}</ProjectGuid>
+    <ProjectGuid>{EA35CE56-56E4-99FF-17DA-3290665776E7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -62,12 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Smooth Camera Follow.cs" />
+    <Compile Include="Assets\Enemy movement goat.cs" />
     <Compile Include="Assets\Pausing.cs" />
     <Compile Include="Assets\VineAnimation.cs" />
     <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\Change Sprite Player.cs" />
     <Compile Include="Assets\Enemy movement fire spread.cs" />
     <Compile Include="Assets\CharacterController2D.cs" />
+    <Compile Include="Assets\Enemy Kill.cs" />
     <Compile Include="Assets\Enemy Fire Sprite.cs" />
     <Compile Include="Assets\Enemyy movement fire main.cs" />
     <Compile Include="Assets\Enemy movement simple.cs" />

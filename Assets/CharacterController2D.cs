@@ -13,14 +13,16 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private LayerMask m_WhatIsDeath;
     [SerializeField] private LayerMask m_WhatIsWater;
     [SerializeField] private LayerMask m_WhatIsIce;
+    [SerializeField] private LayerMask m_WhatIsToKill;
     [SerializeField] private Transform m_GroundCheck;	// A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_GroundCheck2;
 	[SerializeField] private Transform m_GroundCheck3;
 	[SerializeField] private Transform m_DeathCheck;
 	[SerializeField] private Transform m_LeftWallCheck;
 	[SerializeField] private Transform m_RightWallCheck;					
-	[SerializeField] private Transform m_CeilingCheck;							// A position marking where to check for ceilings
-	[SerializeField] private Collider2D m_CrouchDisableCollider;				// A collider that will be disabled when crouching
+	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
+    [SerializeField] private Transform m_KillCheck;
+    [SerializeField] private Collider2D m_CrouchDisableCollider;				// A collider that will be disabled when crouching
 	[SerializeField] private bool m_Grounded;
     [SerializeField] public bool inWater;
     [SerializeField] public bool doubleJumpNext;
@@ -28,6 +30,9 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private bool onIce;
     [SerializeField] public int SpawnX;
     [SerializeField] public int SpawnY;
+	public GameObject DeathObject;
+	private bool wasWall;
+	string preWall;
 
     public Death dedCheck;
 
@@ -43,9 +48,8 @@ public class CharacterController2D : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 velocity = Vector3.zero;
-	public bool m_LeftWall = false;
+	public bool Wall = false;
 	private bool leftInitiated = false;
-	public bool m_RightWall = false;
 	private bool rightInitiated = false;
 	private bool _canJump = false;
 	private bool checkValues = false;
@@ -57,6 +61,8 @@ public class CharacterController2D : MonoBehaviour
 	public bool runDoubleJumpAnimation;
 	public float posX;
 	public float posY;
+	private bool left;
+	private bool right;
 
 
     // this is an example of exposing a public property that exposes the veritical velocity to methods that have access to instances of this class
@@ -95,6 +101,8 @@ public class CharacterController2D : MonoBehaviour
                 //Debug.Log("collider middle");
                 lastSurface = "ground";
                 doubleJumpNext = false;
+				wasWall = false;
+				preWall = "nope";
             }
 
 		}
@@ -112,6 +120,8 @@ public class CharacterController2D : MonoBehaviour
 				//Debug.Log("collider right");
                 lastSurface = "ground";
                 doubleJumpNext = false;
+				wasWall = false;
+				preWall = "nope";
             }
 		}
 
@@ -128,6 +138,8 @@ public class CharacterController2D : MonoBehaviour
 				//Debug.Log("collider left");
 				lastSurface = "ground";
                 doubleJumpNext = false;
+                wasWall = false;
+				preWall = "nope";
             }
 		}
         Collider2D[] waterColliders1 = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsWater);
@@ -173,6 +185,8 @@ public class CharacterController2D : MonoBehaviour
                 checkValues = true;
                 lastSurface = "ice";
                 doubleJumpNext = false;
+                wasWall = false;
+                preWall = "nope";
             }
 
         }
@@ -190,6 +204,8 @@ public class CharacterController2D : MonoBehaviour
                 checkValues = true;
                 lastSurface = "ice";
                 doubleJumpNext = false;
+                wasWall = false;
+                preWall = "nope";
             }
         }
 
@@ -206,6 +222,8 @@ public class CharacterController2D : MonoBehaviour
                 checkValues = true;
                 lastSurface = "ice";
                 doubleJumpNext = false;
+                wasWall = false;
+                preWall = "nope";
             }
         }
 
@@ -213,50 +231,45 @@ public class CharacterController2D : MonoBehaviour
         Collider2D[] deathColliders = Physics2D.OverlapCircleAll(m_DeathCheck.position, k_DeadRadius, m_WhatIsDeath);
 		for (int i = 0; i < deathColliders.Length; i++)
 		{
-			if (deathColliders[i].gameObject != gameObject)
+                if (deathColliders[i].gameObject != gameObject)
             {
                 dedCheck._ded = true;
             }
-		} 
+		}
+        Collider2D[] killColliders = Physics2D.OverlapCircleAll(m_KillCheck.position, k_DeadRadius, m_WhatIsToKill);
+        for (int i = 0; i < killColliders.Length; i++)
+        {
+            
+            if (killColliders[i].gameObject != gameObject)
+			{
+				Debug.Log(killColliders[i].gameObject + "orig game object");
+				DeathObject = killColliders[i].gameObject;
+            }
+        }
 
-		//Check if the player is touching the left wall
-		m_LeftWall = false;
-		m_RightWall = false;
+        //Check if the player is touching the left wall
+        Wall = false;
 		Collider2D[] leftColliders = Physics2D.OverlapCircleAll(m_LeftWallCheck.position, k_WallRadius, m_WhatIsGround);
 		for (int i = 0; i < leftColliders.Length; i++)
 		{
 			if (leftColliders[i].gameObject != gameObject)
             {
-                m_LeftWall = true;
+                Wall = true;
+				wasWall = true;
 				//Debug.Log("Right Wall");
+				if (m_FacingRight == true)
+				{
+					left = true;
+					right = false;
+				}
+				if (m_FacingRight == false) 
+				{ 
+					right = true;
+					left = false;
+				}
+				
             } 
 
-		}
-		Collider2D[] rightColliders = Physics2D.OverlapCircleAll(m_RightWallCheck.position, k_WallRadius, m_WhatIsGround);
-
-        //Debug.Log($"rightColliders.Length: {rightColliders.Length}");
-        for (int i = 0; i < rightColliders.Length; i++)
-		{
-			if (rightColliders[i].gameObject != gameObject)
-            {
-                m_RightWall = true;
-                //Debug.Log("Left Wall");
-            } 
-
-		}
-		if (m_LeftWall) 
-		{
-			m_Rigidbody2D.gravityScale = 0;
-			m_Rigidbody2D.velocity = new Vector2(0f,-1f);
-			groundCount = 0;
-			
-		}
-		if (m_RightWall) 
-		{
-			m_Rigidbody2D.gravityScale = 0;
-			m_Rigidbody2D.velocity = new Vector2(0f,-1f);
-			groundCount = 0;
-			
 		}
 		// set values
 		if (m_Grounded == false && checkValues)
@@ -275,7 +288,7 @@ public class CharacterController2D : MonoBehaviour
 		{
 			_canJump = false;
 		}
-		if (groundCount == 0 && m_LeftWall == false && m_RightWall == false)
+		if (groundCount == 0 && Wall == false && wasWall == false)
 		{
 			doubleJumpNext = true;
 		}
@@ -296,24 +309,39 @@ public class CharacterController2D : MonoBehaviour
 
         }
         _glide = glide;
-		if (inWater == true)
+		if (Wall && m_FacingRight == false && right == false) 
+		{
+			Wall = false;
+        }
+        if (Wall && m_FacingRight == true && left == false)
+        {
+			Wall = false;
+        }
+        if (Wall == true && inWater == false)
+		{
+            m_Rigidbody2D.gravityScale = 0;
+            m_Rigidbody2D.velocity = new Vector2(0f, -1f);
+            groundCount = 0;
+        }
+		if (inWater)
 		{
 			m_Rigidbody2D.gravityScale = 1;
 		}
-		if (inWater == false && glide == false)
+		else if (inWater == false && glide == false && Wall == false)
 		{
 			m_Rigidbody2D.gravityScale = 3;
 		}
-		if (glide == true && m_Rigidbody2D.velocity.y < 0 && m_LeftWall == false && m_RightWall == false && inWater == false)
+		else if (glide == true && m_Rigidbody2D.velocity.y < 0 && Wall == false && inWater == false)
 		{
 			// gliding while falling down sets the gravity to 1
 			m_Rigidbody2D.gravityScale = 1;
 		}
-		else if (m_LeftWall == false && m_RightWall == false && inWater == false)
+		else if (Wall == false && inWater == false)
 		{
 			// normal falling or moving
 			m_Rigidbody2D.gravityScale = 3;
 		}
+		else 
 		// If crouching, check to see if the character can stand up
 		if (crouch)
 		{
@@ -375,7 +403,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 		}
 		// If the player should jump...
-		if (_canJump && jump && inWater == false)
+		if (_canJump && jump && inWater == false && Wall == false)
 		{
 			// Add a vertical force to the player.
 			_canJump = false;
@@ -395,15 +423,32 @@ public class CharacterController2D : MonoBehaviour
         } else if (jump && inWater == true) {
             m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_WaterJumpForce);
 			runSwimJumpAnimation = true;
-        } 
-
-		if (InitiateWall && m_LeftWall && inWater == false)
+        }
+		if (InitiateWall && Wall && inWater == false && m_FacingRight == false)
 		{
-			m_Rigidbody2D.AddForce(new Vector2(900f, 400f));
+			if (wasWall && preWall == "right")
+			{
+				m_Rigidbody2D.AddForce(new Vector2(900f, 400f));
+			}
+			else
+			{
+                m_Rigidbody2D.AddForce(new Vector2(900f, 600f));
+            }
+			preWall = "right";
+			
 		}
-		if (InitiateWall && m_RightWall && inWater == false)
+		if (InitiateWall && Wall && inWater == false && m_FacingRight == true)
 		{
-			m_Rigidbody2D.AddForce(new Vector2(-900f, 400f));
+            if (wasWall && preWall == "left")
+            {
+                m_Rigidbody2D.AddForce(new Vector2(-900f, 400f));
+            }
+            else
+            {
+                m_Rigidbody2D.AddForce(new Vector2(-900f, 600f));
+            }
+			preWall = "left";
+
 		}
 	}
 

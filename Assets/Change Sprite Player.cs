@@ -77,7 +77,7 @@ public class ChangeSpritePlayer : MonoBehaviour
         }
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         walkXTotalStored = walkXTotal;
-        Debug.Log(horizontalMove);
+        //Debug.Log(horizontalMove);
         walkXTotal = Mathf.Abs(horizontalMove)/40 + walkXTotal;
         // if you are not moving up, down, left or right
         if (-0.1f < m_Rigidbody2D.velocity.x && m_Rigidbody2D.velocity.x < 0.1f && m_Rigidbody2D.velocity.y == 0 && controller.inWater == false)

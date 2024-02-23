@@ -9,6 +9,7 @@ public class Enemyymovementfiremain : MonoBehaviour
     const float k_TouchingRadius = .05f;
     private float horizontalMove = 0f;
     private bool goingRight = false;
+    public bool goingRightSpreader = false;
     private Rigidbody2D m_Rigidbody2D;
     private Vector3 velocity = Vector3.zero;
     [SerializeField] private LayerMask m_WhatIsGround;
@@ -26,6 +27,8 @@ public class Enemyymovementfiremain : MonoBehaviour
     float addLeft;
     float addRight;
     string dir = "left";
+    private Vector2 Leftdirection = Vector2.left;
+    private Vector2 Rightdirection = Vector2.right;
 
     private void Awake()
     {
@@ -108,19 +111,30 @@ public class Enemyymovementfiremain : MonoBehaviour
             go = Random.Range(1, 6);
             Timer = 0;
         }
+        
+        
         if (go == 5  || Input.GetButtonDown("Q"))
         {
             if (dir == "left") 
             {
-                Pos = new Vector3(m_Rigidbody2D.transform.position.x - 1.5f , m_Rigidbody2D.transform.position.y , m_Rigidbody2D.transform.position.z );
-                dir = "right";
-                clonesMade = clonesMade + 1;
+                RaycastHit2D RaycastLeft = Physics2D.Raycast(m_LeftCheck.transform.position, Rightdirection, 2f, m_WhatIsGround);
+                if (RaycastLeft.rigidbody == null)
+                {
+                    Pos = new Vector3(m_Rigidbody2D.transform.position.x - 1.5f, m_Rigidbody2D.transform.position.y, m_Rigidbody2D.transform.position.z);
+                    dir = "right";
+                    clonesMade = clonesMade + 1;
+                    goingRightSpreader = false;
+                    Debug.Log("hit");
+                }
+                
             }
             else if (dir  == "right") 
             {
+                RaycastHit2D RaycastRight = Physics2D.Raycast(m_RightCheck.transform.position, Leftdirection, 2f, m_WhatIsGround);
                 Pos = new Vector3(m_Rigidbody2D.transform.position.x + 1.5f, m_Rigidbody2D.transform.position.y, m_Rigidbody2D.transform.position.z);
                 clonesMade = clonesMade + 1;
                 dir = "left";
+                goingRightSpreader = true;
             }
 
             Instantiate(Spreader, Pos, m_Rigidbody2D.transform.rotation);

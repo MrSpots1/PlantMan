@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (Input.GetButtonDown("Jump"))
 		{
-			if (controller.m_LeftWall == false && controller.m_RightWall == false)
+			if (controller.Wall == false)
 			{
 				_jump = true;
 			} 
