@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      semisolid dirt 4_0: 8566750998613258868
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
