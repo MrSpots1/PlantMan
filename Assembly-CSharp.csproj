@@ -68,6 +68,7 @@
     <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\Change Sprite Player.cs" />
     <Compile Include="Assets\Enemy movement fire spread.cs" />
+    <Compile Include="Assets\Enemy movement air.cs" />
     <Compile Include="Assets\CharacterController2D.cs" />
     <Compile Include="Assets\Enemy Kill.cs" />
     <Compile Include="Assets\Enemy Fire Sprite.cs" />
