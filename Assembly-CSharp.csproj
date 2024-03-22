@@ -64,6 +64,7 @@
     <Compile Include="Assets\Smooth Camera Follow.cs" />
     <Compile Include="Assets\Enemy movement goat.cs" />
     <Compile Include="Assets\Pausing.cs" />
+    <Compile Include="Assets\Enemy movement falling.cs" />
     <Compile Include="Assets\VineAnimation.cs" />
     <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\Change Sprite Player.cs" />

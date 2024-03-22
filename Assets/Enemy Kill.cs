@@ -17,8 +17,8 @@ public class EnemyKill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(ME + "Me");
-        Debug.Log(movement.DeathObject + "later game obj");
+        //Debug.Log(ME + "Me");
+        //Debug.Log(movement.DeathObject + "later game obj");
         if (movement.DeathObject == ME)
         {
             Destroy(THEM, 0f);
