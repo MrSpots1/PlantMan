@@ -33,6 +33,12 @@ public class CharacterController2D : MonoBehaviour
 	public GameObject DeathObject;
 	private bool wasWall;
 	string preWall;
+	public UnityEngine.GameObject collider1;
+    public UnityEngine.GameObject collider2;
+    public UnityEngine.GameObject collider3;
+    public UnityEngine.GameObject colliderice;
+    public UnityEngine.GameObject colliderIce2;
+    public UnityEngine.GameObject colliderIce3;
 
     public Death dedCheck;
 
@@ -93,6 +99,7 @@ public class CharacterController2D : MonoBehaviour
 		{
 			if (colliders[i].gameObject != gameObject)
             {
+				collider1 = colliders[i].gameObject;
 				// the character is touching the ground in the middle of the square
                 groundCount = 6;
 				canDash=true;
@@ -112,7 +119,8 @@ public class CharacterController2D : MonoBehaviour
 		{
 			if (colliders2[i].gameObject != gameObject)
             {
-				// the character is touching the ground in the right of the square
+                collider2 = colliders2[i].gameObject;
+                // the character is touching the ground in the right of the square
                 groundCount = 6;
 				canDash=true;
 				m_Grounded = true;
@@ -130,7 +138,8 @@ public class CharacterController2D : MonoBehaviour
 		{
 			if (colliders3[i].gameObject != gameObject)
             {
-				// the character is touching the ground in the left of the square
+                collider3 = colliders3[i].gameObject;
+                // the character is touching the ground in the left of the square
                 groundCount = 6;
 				canDash=true;
 				m_Grounded = true;
@@ -177,6 +186,7 @@ public class CharacterController2D : MonoBehaviour
         {
             if (iceColliders1[i].gameObject != gameObject)
             {
+				colliderice = iceColliders1[i].gameObject;
 				// the character is touching ice in the middle of the square
 				onIce = true;
                 groundCount = 6;
@@ -196,6 +206,7 @@ public class CharacterController2D : MonoBehaviour
         {
             if (iceColliders2[i].gameObject != gameObject)
             {
+                colliderIce2 = iceColliders2[i].gameObject;
                 // the character is touching ice in the right of the square
                 onIce = true;
                 groundCount = 6;
@@ -214,6 +225,7 @@ public class CharacterController2D : MonoBehaviour
         {
             if (iceColliders3[i].gameObject != gameObject)
             {
+                colliderIce3 = iceColliders3[i].gameObject;
                 // the character is touching ice in the left of the square
                 onIce = true;
                 groundCount = 6;
@@ -226,7 +238,7 @@ public class CharacterController2D : MonoBehaviour
                 preWall = "nope";
             }
         }
-
+		Debug.Log("1: " + collider1 + " 2: " + collider2 + " 3: " + collider3 + " ice1: " + colliderice + " ice2: " + colliderIce2 + " ice3: " + colliderIce3);
         // Check if the player has collided with Dead
         Collider2D[] deathColliders = Physics2D.OverlapCircleAll(m_DeathCheck.position, k_DeadRadius, m_WhatIsDeath);
 		for (int i = 0; i < deathColliders.Length; i++)
