@@ -21,24 +21,31 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (Input.GetButtonDown("Jump"))
 		{
-			if (controller.Wall == false)
+			if (controller.NoWallJump)
 			{
 				_jump = true;
-			} 
+			}
+			else if (controller.Wall == false)
+			{
+                _jump = true;
+            } 
 			else 
 			{
-			_initiateWall = true;
+				_initiateWall = true;
 			}
 		}
 		
 		if (Input.GetButtonDown("Glide") /*&& ableGlide*/)
 		{
-			_glide = true;
+			if (_glide == true)
+			{
+				_glide = false;
+			} else if (_glide == false)
+			{
+				_glide = true;
+			}
 		}
-		else if (Input.GetButtonUp("Glide"))
-		{
-			_glide = false;
-		}
+
 
 		if (Input.GetButtonDown("Crouch"))
 		{

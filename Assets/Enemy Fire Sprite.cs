@@ -18,7 +18,7 @@ public class EnemyFireSprite : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         flameCounter = flameCounter + 1;
         if (flameCounter == 25)

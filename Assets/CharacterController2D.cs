@@ -28,8 +28,8 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] public bool doubleJumpNext;
     [SerializeField] private string lastSurface;
 	[SerializeField] private bool onIce;
-    [SerializeField] public int SpawnX;
-    [SerializeField] public int SpawnY;
+    [SerializeField] public float SpawnX;
+    [SerializeField] public float SpawnY;
 	public GameObject DeathObject;
 	private bool wasWall;
 	string preWall;
@@ -69,6 +69,9 @@ public class CharacterController2D : MonoBehaviour
 	public float posY;
 	private bool left;
 	private bool right;
+    [SerializeField] private float wind;
+	public bool NoWallJump;
+	public bool isGliding;
 
 
     // this is an example of exposing a public property that exposes the veritical velocity to methods that have access to instances of this class
@@ -308,12 +311,26 @@ public class CharacterController2D : MonoBehaviour
         groundCount = groundCount - 1;
 
 		// determine gravity value
-        
+        if (m_Grounded == true && Wall == true)
+		{
+			NoWallJump = true;
+		}
+		if (Wall == false)
+		{
+			NoWallJump = false;
+		}
 	}
 
 
 	public void Move(float move, bool crouch, bool jump, bool glide, bool dash, bool InitiateWall)
 	{
+		if (m_Rigidbody2D.velocity.y < 0)
+		{
+			isGliding = glide;
+		} else
+		{
+			isGliding = false;
+		}
         if (dedCheck._ded)
         {
             transform.position = new Vector2(SpawnX, SpawnY);
@@ -329,31 +346,31 @@ public class CharacterController2D : MonoBehaviour
         {
 			Wall = false;
         }
-        if (Wall == true && inWater == false)
-		{
-            m_Rigidbody2D.gravityScale = 0;
-            m_Rigidbody2D.velocity = new Vector2(0f, -1f);
-            groundCount = 0;
-        }
+
 		if (inWater)
 		{
 			m_Rigidbody2D.gravityScale = 1;
 		}
-		else if (inWater == false && glide == false && Wall == false)
+		else if (Wall == true && NoWallJump == false)
 		{
-			m_Rigidbody2D.gravityScale = 3;
+			m_Rigidbody2D.gravityScale = 0;
+			m_Rigidbody2D.velocity = new Vector2(0f, -1f);
+			groundCount = 0;
 		}
-		else if (glide == true && m_Rigidbody2D.velocity.y < 0 && Wall == false && inWater == false)
+		else if (glide == true && m_Rigidbody2D.velocity.y < 0 && (Wall == false || Wall == true && NoWallJump))
 		{
 			// gliding while falling down sets the gravity to 1
 			m_Rigidbody2D.gravityScale = 1;
 		}
-		else if (Wall == false && inWater == false)
-		{
-			// normal falling or moving
-			m_Rigidbody2D.gravityScale = 3;
-		}
-		else 
+        else
+        {
+            m_Rigidbody2D.gravityScale = 3;
+        }
+
+
+
+
+        
 		// If crouching, check to see if the character can stand up
 		if (crouch)
 		{
@@ -392,7 +409,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 
 			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+			Vector3 targetVelocity = new Vector2(move * 10f - wind, m_Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
 			if (lastSurface == "ground" || inWater)
 			{
@@ -415,7 +432,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 		}
 		// If the player should jump...
-		if (_canJump && jump && inWater == false && Wall == false)
+		if (_canJump && jump && inWater == false && ((Wall == false) || (Wall == true && NoWallJump)))
 		{
 			// Add a vertical force to the player.
 			_canJump = false;

@@ -63,18 +63,26 @@
   <ItemGroup>
     <Compile Include="Assets\Smooth Camera Follow.cs" />
     <Compile Include="Assets\Enemy movement goat.cs" />
+    <Compile Include="Assets\bird sprite.cs" />
     <Compile Include="Assets\Pausing.cs" />
     <Compile Include="Assets\Enemy movement falling.cs" />
     <Compile Include="Assets\VineAnimation.cs" />
     <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\Change Sprite Player.cs" />
+    <Compile Include="Assets\Checkpoint.cs" />
     <Compile Include="Assets\Enemy movement fire spread.cs" />
     <Compile Include="Assets\Enemy movement air.cs" />
     <Compile Include="Assets\Falling stones.cs" />
+    <Compile Include="Assets\Flower sprite.cs" />
     <Compile Include="Assets\CharacterController2D.cs" />
     <Compile Include="Assets\Enemy Kill.cs" />
     <Compile Include="Assets\Enemy Fire Sprite.cs" />
+    <Compile Include="Assets\Finish.cs" />
+    <Compile Include="Assets\Change Sprite Sheep.cs" />
     <Compile Include="Assets\Enemyy movement fire main.cs" />
+    <Compile Include="Assets\Enemy movement sheep.cs" />
+    <Compile Include="Assets\Master controler.cs" />
+    <Compile Include="Assets\speed game.cs" />
     <Compile Include="Assets\Enemy movement simple.cs" />
     <Compile Include="Assets\Death.cs" />
     <Compile Include="Assets\Timer.cs" />

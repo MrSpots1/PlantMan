@@ -55,7 +55,7 @@ public class Fallingstones : MonoBehaviour
         {
             fallcounter++;
         }
-        Debug.Log(m_Rigidbody2D);
+        //Debug.Log(m_Rigidbody2D);
         if (fallcounter == 100)
         {
             fall = true;

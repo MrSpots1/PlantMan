@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Death : MonoBehaviour
 {
+    public Mastercontroler mastercontroler;
     public bool _ded
     {
         get;
@@ -18,6 +19,10 @@ public class Death : MonoBehaviour
     }
     void Update()
     {
+        if (_ded)
+        {
+            mastercontroler.activateLevel = true;
+        }
         _ded = false; // you died
     }
 }

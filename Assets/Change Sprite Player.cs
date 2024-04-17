@@ -24,6 +24,8 @@ public class ChangeSpritePlayer : MonoBehaviour
     public Sprite doubleJump;
     public Sprite GroundJump;
     public Sprite SwimJump;
+    public Sprite WallSlide;
+    public Sprite Glide;
     private bool inAirNoMove;
     private int inAirNoMoveCounter;
     private int SwimCounter;
@@ -34,6 +36,7 @@ public class ChangeSpritePlayer : MonoBehaviour
     private float horizontalMove = 0f;
     public PlayerMovement buttons;
     public CharacterController2D controller;
+    public string ActiveState;
     void Start()
     {
         spriteRenderer.sprite = Idle1; 
@@ -47,7 +50,9 @@ public class ChangeSpritePlayer : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        // when you're in water, increse counter, and if you are in water and not in a swiming animation, swich to one. 
+        
+        // when you're in water, increse counter, and if you are in water and not in a swiming animation, swich to one.
+        if (!controller.isGliding && !controller.inWater && && !spriteRenderer.sprite == doubleJump && !spriteRenderer.sprite == GroundJump && )
         if (controller.inWater)
         {
             SwimCounter = SwimCounter + 1;
@@ -59,8 +64,16 @@ public class ChangeSpritePlayer : MonoBehaviour
         {
             SwimCounter = 0;
         }
+        if (!controller.inWater && controller.Wall && !controller.NoWallJump)
+        {
+            spriteRenderer.sprite = WallSlide;
+        }
+        if (!controller.inWater && (controller.NoWallJump || !controller.Wall) && controller.isGliding)
+        {
+            spriteRenderer.sprite = Glide;
+        }
         // if you jump and dont move, increase no move counter
-        if (inAirNoMove && controller.inWater == false)
+        if (inAirNoMove && controller.inWater == false && !controller.isGliding)
         {
             inAirNoMoveCounter = inAirNoMoveCounter + 1;
         }
@@ -75,12 +88,16 @@ public class ChangeSpritePlayer : MonoBehaviour
             inAirNoMoveCounter = 0;
             inAirNoMove = false;
         }
-        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-        walkXTotalStored = walkXTotal;
-        //Debug.Log(horizontalMove);
-        walkXTotal = Mathf.Abs(horizontalMove)/40 + walkXTotal;
+        if (!controller.Wall && !controller.isGliding)
+        {
+            horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+            walkXTotalStored = walkXTotal;
+            //Debug.Log(horizontalMove);
+            walkXTotal = Mathf.Abs(horizontalMove)/40 + walkXTotal;
+        }
+        
         // if you are not moving up, down, left or right
-        if (-0.1f < m_Rigidbody2D.velocity.x && m_Rigidbody2D.velocity.x < 0.1f && m_Rigidbody2D.velocity.y == 0 && controller.inWater == false)
+        if (-0.1f < m_Rigidbody2D.velocity.x && m_Rigidbody2D.velocity.x < 0.1f && m_Rigidbody2D.velocity.y == 0 && controller.inWater == false && controller.isGliding == false)
         {
             walkXTotalStored = walkXTotal;
             // increse idle counter

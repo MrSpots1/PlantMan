@@ -17,7 +17,7 @@ public class Enemymovementair : MonoBehaviour
     [SerializeField] private float spawnY = 0f;
     private float startingY;
     private float yVelocity;
-
+    int x = 1;
     private void Awake()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -32,22 +32,10 @@ public class Enemymovementair : MonoBehaviour
         if (deadCheck._ded)
         {
             transform.position = new Vector2(spawnX, spawnY);
-            goingRight = false;
+            
         }
         //Debug.Log($"m_LeftCheck.position: {m_LeftCheck.position}");
-        Collider2D[] collidersLeft = Physics2D.OverlapCircleAll(m_LeftCheck.position, k_TouchingRadius, m_WhatIsGround);
-        //Debug.Log($"collidersLeft.Length: {collidersLeft.Length}");
-        for (int i = 0; i < collidersLeft.Length; i++)
-        {
-            //Debug.Log($"left check: {collidersLeft[i].gameObject}");
-            //Debug.Log($"gameObject {gameObject}");
-            if (collidersLeft[i].gameObject != gameObject)
-            {
-                goingRight = true;
-                //Debug.Log("Right");
-            }
-
-        }
+        
 
         //Debug.Log($"m_RightCheck.position: {m_RightCheck.position}");
         Collider2D[] collidersRight = Physics2D.OverlapCircleAll(m_RightCheck.position, k_TouchingRadius, m_WhatIsGround);
@@ -58,19 +46,19 @@ public class Enemymovementair : MonoBehaviour
             //Debug.Log($"gameObject {gameObject}");
             if (collidersRight[i].gameObject != gameObject)
             {
-                goingRight = false;
+               
+                Vector3 theScale = transform.localScale;
+                theScale.x *= -1;
+                transform.localScale = theScale;
                 //Debug.Log("Left");
+                x = x * -1;
+
             }
 
         }
-        if (goingRight)
-        {
-            horizontalMove = 5;
-        }
-        else
-        {
-            horizontalMove = -5;
-        }
+        
+        horizontalMove = 5*x;
+        
         yVelocity = m_Rigidbody2D.velocity.y;
         if (m_Rigidbody2D.position.y <= startingY)
         {
