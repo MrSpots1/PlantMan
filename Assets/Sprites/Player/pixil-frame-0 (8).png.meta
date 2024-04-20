@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pixil-frame-0 (8)_0: -3188702180127858350
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

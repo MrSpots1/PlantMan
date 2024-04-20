@@ -130,7 +130,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      blue air fryer_1_0: -3604415814270088175
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
