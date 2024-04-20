@@ -62,6 +62,7 @@ public class CharacterController2D : MonoBehaviour
 	private bool canDash = false;
 	public bool runGroundJumpAnimation;
 	public bool runSwimJumpAnimation;
+	public bool runDashAnimation;
     float dashX;
 	float dashY;
 	public bool runDoubleJumpAnimation;
@@ -386,6 +387,7 @@ public class CharacterController2D : MonoBehaviour
 		{
 			m_Rigidbody2D.velocity = new Vector2(dashX, dashY);
 			canDash = false;
+			runDashAnimation = true;
         }
 
 		//only control the player if grounded or airControl is turned on

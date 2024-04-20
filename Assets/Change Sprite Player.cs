@@ -26,6 +26,7 @@ public class ChangeSpritePlayer : MonoBehaviour
     public Sprite SwimJump;
     public Sprite WallSlide;
     public Sprite Glide;
+    public Sprite dash;
     private bool inAirNoMove;
     private int inAirNoMoveCounter;
     private int SwimCounter;
@@ -154,6 +155,14 @@ public class ChangeSpritePlayer : MonoBehaviour
             spriteRenderer.sprite = SwimJump;
             controller.runSwimJumpAnimation = false;
             swimStep = 2;
+        }
+        if (controller.runDashAnimation)
+        {
+            spriteRenderer.sprite = dash;
+            controller.runDashAnimation = false;
+            walkStep = 2;
+            walkXTotal = 0;
+            inAirNoMove = true;
         }
         // if you walk
         if (walkXTotal > 15f && controller.inWater == false)
