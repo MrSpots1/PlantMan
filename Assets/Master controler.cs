@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Playables;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
@@ -27,8 +28,23 @@ public class Mastercontroler : MonoBehaviour
     [SerializeField] public int latestLevel;
     [SerializeField] public bool finalUnlocked;
     [SerializeField] public bool GameBeaten;
-
-
+    [SerializeField] public bool world1Collectable;
+    [SerializeField] public bool world2Collectable;
+    [SerializeField] public bool world3Collectable;
+    [SerializeField] public bool world4Collectable;
+    [SerializeField] public bool world5Collectable;
+    [SerializeField] public bool world6Collectable;
+    [SerializeField] public bool world7Collectable;
+    [SerializeField] public bool world8Collectable;
+    [SerializeField] public bool bonus1Collectable;
+    [SerializeField] public bool bonus2Collectable;
+    [SerializeField] public bool bonus3Collectable;
+    [SerializeField] public bool bonus4Collectable;
+    public int playerHitPoints;
+    public bool beatLevel;
+    public bool leaveLevel;
+    [SerializeField] public int percent;
+    [SerializeField] public int totalCollectables;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,30 +55,51 @@ public class Mastercontroler : MonoBehaviour
     
     void Update()
     {
+        if (level > latestLevel)
+        {
+            latestLevel = level;
+        }
+        
+        percent = ((latestLevel - 1)*2) + totalCollectables*2;
+        if (latestLevel >= 26)
+        {
+            percent = percent + 10;
+        }
+        if (latestLevel == 29)
+        {
+            percent = percent + 10;
+        }
+       
+
         if (state == 1)
         {
             
         }
+        
         if (activateLevel)
         {
+            beatLevel = false;
             activateLevel = false;
             if (level == 1)
             {
                 ActivateLevel1();
                 DeactivateLevel2();
                 DeactivateLevel3();
+                playerHitPoints = 5;
             }
             if (level == 2)
             {
                 ActivateLevel2();
                 DeactivateLevel1();
                 DeactivateLevel3();
+                playerHitPoints = 5;
             }
             if (level == 3)
             {
                 ActivateLevel3();
                 DeactivateLevel1();
                 DeactivateLevel2();
+                playerHitPoints = 4;
             }
         }
     }

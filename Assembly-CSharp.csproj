@@ -65,6 +65,7 @@
     <Compile Include="Assets\Enemy movement goat.cs" />
     <Compile Include="Assets\bird sprite.cs" />
     <Compile Include="Assets\Pausing.cs" />
+    <Compile Include="Assets\Collectables.cs" />
     <Compile Include="Assets\Enemy movement falling.cs" />
     <Compile Include="Assets\VineAnimation.cs" />
     <Compile Include="Assets\PlayerMovement.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\Enemy Fire Sprite.cs" />
     <Compile Include="Assets\Finish.cs" />
     <Compile Include="Assets\Game.cs" />
+    <Compile Include="Assets\heath bar.cs" />
     <Compile Include="Assets\Change Sprite Sheep.cs" />
     <Compile Include="Assets\Enemyy movement fire main.cs" />
     <Compile Include="Assets\Enemy movement sheep.cs" />

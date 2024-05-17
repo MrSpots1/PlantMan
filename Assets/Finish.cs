@@ -40,6 +40,7 @@ public class Finish : MonoBehaviour
                     deadCheck._ded = true;
                     mastercontroler.level = 2;
                     ME.SetActive(false);
+                    mastercontroler.beatLevel = true;
                 }
             }
 

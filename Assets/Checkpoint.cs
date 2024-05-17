@@ -10,6 +10,7 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private LayerMask m_WhatIsPlayer;
     private Rigidbody2D m_Rigidbody2D;
     public CharacterController2D MainPlayerScript;
+    public Death death;
     
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,7 @@ public class Checkpoint : MonoBehaviour
                 {
                     MainPlayerScript.SpawnX = posX;
                     MainPlayerScript.SpawnY = posY + 1f;
+                    death.heathPlayer = death.heathPoints;
                 }
             }
 

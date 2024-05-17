@@ -14,6 +14,8 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private LayerMask m_WhatIsWater;
     [SerializeField] private LayerMask m_WhatIsIce;
     [SerializeField] private LayerMask m_WhatIsToKill;
+    [SerializeField] private LayerMask Instakill;
+    [SerializeField] private LayerMask OneHit;
     [SerializeField] private Transform m_GroundCheck;	// A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_GroundCheck2;
 	[SerializeField] private Transform m_GroundCheck3;
@@ -30,6 +32,7 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private bool onIce;
     [SerializeField] public float SpawnX;
     [SerializeField] public float SpawnY;
+
 	public GameObject DeathObject;
 	private bool wasWall;
 	string preWall;
@@ -242,14 +245,22 @@ public class CharacterController2D : MonoBehaviour
                 preWall = "nope";
             }
         }
-		Debug.Log("1: " + collider1 + " 2: " + collider2 + " 3: " + collider3 + " ice1: " + colliderice + " ice2: " + colliderIce2 + " ice3: " + colliderIce3);
+		//Debug.Log("1: " + collider1 + " 2: " + collider2 + " 3: " + collider3 + " ice1: " + colliderice + " ice2: " + colliderIce2 + " ice3: " + colliderIce3);
         // Check if the player has collided with Dead
         Collider2D[] deathColliders = Physics2D.OverlapCircleAll(m_DeathCheck.position, k_DeadRadius, m_WhatIsDeath);
 		for (int i = 0; i < deathColliders.Length; i++)
 		{
                 if (deathColliders[i].gameObject != gameObject)
             {
-                dedCheck._ded = true;
+				if (deathColliders[i].gameObject.layer == 12)
+				{
+					dedCheck._ded = true;
+				}
+				else if (deathColliders[i].gameObject.layer == 8)
+				{
+					dedCheck.hit = true;
+				}
+				
             }
 		}
         Collider2D[] killColliders = Physics2D.OverlapCircleAll(m_KillCheck.position, k_DeadRadius, m_WhatIsToKill);
@@ -323,164 +334,201 @@ public class CharacterController2D : MonoBehaviour
 	}
 
 
-	public void Move(float move, bool crouch, bool jump, bool glide, bool dash, bool InitiateWall)
+	public void Move(float move, bool crouch, bool jump, bool glide, bool dash, bool InitiateWall, bool fly, float vertical)
 	{
-		if (m_Rigidbody2D.velocity.y < 0)
+		if (!fly)
 		{
-			isGliding = glide;
-		} else
-		{
-			isGliding = false;
-		}
-        if (dedCheck._ded)
-        {
-            transform.position = new Vector2(SpawnX, SpawnY);
-            m_Rigidbody2D.velocity = new Vector2(0f, 0f);
-
-        }
-        _glide = glide;
-		if (Wall && m_FacingRight == false && right == false) 
-		{
-			Wall = false;
-        }
-        if (Wall && m_FacingRight == true && left == false)
-        {
-			Wall = false;
-        }
-
-		if (inWater)
-		{
-			m_Rigidbody2D.gravityScale = 1;
-		}
-		else if (Wall == true && NoWallJump == false)
-		{
-			m_Rigidbody2D.gravityScale = 0;
-			m_Rigidbody2D.velocity = new Vector2(0f, -1f);
-			groundCount = 0;
-		}
-		else if (glide == true && m_Rigidbody2D.velocity.y < 0 && (Wall == false || Wall == true && NoWallJump))
-		{
-			// gliding while falling down sets the gravity to 1
-			m_Rigidbody2D.gravityScale = 1;
-		}
-        else
-        {
-            m_Rigidbody2D.gravityScale = 3;
-        }
-
-
-
-
-        
-		// If crouching, check to see if the character can stand up
-		if (crouch)
-		{
-			// If the character has a ceiling preventing them from standing up, keep them crouching
-			if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
+			if (m_Rigidbody2D.velocity.y < 0)
 			{
-				crouch = true;
+				isGliding = glide;
 			}
-		}
+			else
+			{
+				isGliding = false;
+			}
+			if (dedCheck.resetPlayer)
+			{
+				transform.position = new Vector2(SpawnX, SpawnY);
+				m_Rigidbody2D.velocity = new Vector2(0f, 0f);
+				dedCheck.resetPlayer = false;
+				dedCheck.hit = false;
+                dedCheck.heathPlayer = dedCheck.heathPoints;
+                dedCheck.InvinciblityTimer = 0;
+            }
+			_glide = glide;
+			if (Wall && m_FacingRight == false && right == false)
+			{
+				Wall = false;
+			}
+			if (Wall && m_FacingRight == true && left == false)
+			{
+				Wall = false;
+			}
 
-		//if dashing, and we can dash, dash
-		if (dash && canDash && m_Grounded == false && inWater == false)
-		{
-			m_Rigidbody2D.velocity = new Vector2(dashX, dashY);
-			canDash = false;
-			runDashAnimation = true;
-        }
+			if (inWater)
+			{
+				m_Rigidbody2D.gravityScale = 1;
+			}
+			else if (Wall == true && NoWallJump == false)
+			{
+				m_Rigidbody2D.gravityScale = 0;
+				m_Rigidbody2D.velocity = new Vector2(0f, -1f);
+				groundCount = 0;
+			}
+			else if (glide == true && m_Rigidbody2D.velocity.y < 0 && (Wall == false || Wall == true && NoWallJump))
+			{
+				// gliding while falling down sets the gravity to 1
+				m_Rigidbody2D.gravityScale = 1;
+			}
+			else
+			{
+				m_Rigidbody2D.gravityScale = 3;
+			}
 
-		//only control the player if grounded or airControl is turned on
-		if (m_Grounded || m_AirControl)
-		{
-			// If crouching
+
+
+
+
+			// If crouching, check to see if the character can stand up
 			if (crouch)
 			{
-				// Reduce the speed by the crouchSpeed multiplier
-				move *= m_CrouchSpeed;
-
-				// Disable one of the colliders when crouching
-				if (m_CrouchDisableCollider != null)
-					m_CrouchDisableCollider.enabled = false;
-			}
-			else
-			{
-				// Enable the collider when not crouching
-				if (m_CrouchDisableCollider != null)
-					m_CrouchDisableCollider.enabled = true;
+				// If the character has a ceiling preventing them from standing up, keep them crouching
+				if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
+				{
+					crouch = true;
+				}
 			}
 
-			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 10f - wind, m_Rigidbody2D.velocity.y);
-			// And then smoothing it out and applying it to the character
-			if (lastSurface == "ground" || inWater)
+			//if dashing, and we can dash, dash
+			if (dash && canDash && m_Grounded == false && inWater == false)
 			{
-				m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_MovementSmoothing);
-			} else if (lastSurface == "ice")
-			{
-				m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_IceMovementSmoothing);
+				m_Rigidbody2D.velocity = new Vector2(dashX, dashY);
+				canDash = false;
+				runDashAnimation = true;
 			}
-			// If the input is moving the player right and the player is facing left...
-			if (move > 0 && !m_FacingRight)
+
+			//only control the player if grounded or airControl is turned on
+			if (m_Grounded || m_AirControl)
 			{
-				// ... flip the player.
-				Flip();
+				// If crouching
+				if (crouch)
+				{
+					// Reduce the speed by the crouchSpeed multiplier
+					move *= m_CrouchSpeed;
+
+					// Disable one of the colliders when crouching
+					if (m_CrouchDisableCollider != null)
+						m_CrouchDisableCollider.enabled = false;
+				}
+				else
+				{
+					// Enable the collider when not crouching
+					if (m_CrouchDisableCollider != null)
+						m_CrouchDisableCollider.enabled = true;
+				}
+
+				// Move the character by finding the target velocity
+				Vector3 targetVelocity = new Vector2(move * 10f - wind, m_Rigidbody2D.velocity.y);
+				// And then smoothing it out and applying it to the character
+				if (lastSurface == "ground" || inWater)
+				{
+					m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_MovementSmoothing);
+				}
+				else if (lastSurface == "ice")
+				{
+					m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_IceMovementSmoothing);
+				}
+				// If the input is moving the player right and the player is facing left...
+				if (move > 0 && !m_FacingRight)
+				{
+					// ... flip the player.
+					Flip();
+				}
+				// Otherwise if the input is moving the player left and the player is facing right...
+				else if (move < 0 && m_FacingRight)
+				{
+					// ... flip the player.
+					Flip();
+				}
 			}
-			// Otherwise if the input is moving the player left and the player is facing right...
-			else if (move < 0 && m_FacingRight)
+			// If the player should jump...
+			if (_canJump && jump && inWater == false && ((Wall == false) || (Wall == true && NoWallJump)))
 			{
-				// ... flip the player.
-				Flip();
+				// Add a vertical force to the player.
+				_canJump = false;
+				groundCount = 0;
+				m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+				Debug.Log("normalJump");
+				doubleJumpNext = true;
+				runGroundJumpAnimation = true;
+
+
+			}
+			else if (inWater == false && doubleJumpNext && jump)
+			{
+				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, doubleJumpForce);
+				doubleJumpNext = false;
+				Debug.Log("double jump");
+				runDoubleJumpAnimation = true;
+			}
+			else if (jump && inWater == true)
+			{
+				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_WaterJumpForce);
+				runSwimJumpAnimation = true;
+			}
+			if (InitiateWall && Wall && inWater == false && m_FacingRight == false)
+			{
+				if (wasWall && preWall == "right")
+				{
+					m_Rigidbody2D.AddForce(new Vector2(900f, 400f));
+				}
+				else
+				{
+					m_Rigidbody2D.AddForce(new Vector2(900f, 600f));
+				}
+				preWall = "right";
+
+			}
+			if (InitiateWall && Wall && inWater == false && m_FacingRight == true)
+			{
+				if (wasWall && preWall == "left")
+				{
+					m_Rigidbody2D.AddForce(new Vector2(-900f, 400f));
+				}
+				else
+				{
+					m_Rigidbody2D.AddForce(new Vector2(-900f, 600f));
+				}
+				preWall = "left";
+
 			}
 		}
-		// If the player should jump...
-		if (_canJump && jump && inWater == false && ((Wall == false) || (Wall == true && NoWallJump)))
+		if (fly)
 		{
-			// Add a vertical force to the player.
-			_canJump = false;
-			groundCount = 0;
-			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-			Debug.Log("normalJump");
-			doubleJumpNext = true;
-			runGroundJumpAnimation = true;
-
-
-        } else if (inWater == false && doubleJumpNext && jump)
-		{
-            m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, doubleJumpForce);
-			doubleJumpNext = false;
-			Debug.Log("double jump");
-            runDoubleJumpAnimation = true;
-        } else if (jump && inWater == true) {
-            m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_WaterJumpForce);
-			runSwimJumpAnimation = true;
+			m_Rigidbody2D.gravityScale = 0;
+            Vector3 targetVelocity = new Vector2(move * 10f, vertical * 11f);
+            m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref velocity, m_MovementSmoothing);
+            if (move > 0 && !m_FacingRight)
+            {
+                // ... flip the player.
+                Flip();
+            }
+            // Otherwise if the input is moving the player left and the player is facing right...
+            else if (move < 0 && m_FacingRight)
+            {
+                // ... flip the player.
+                Flip();
+            }
+            if (dedCheck.resetPlayer)
+            {
+                transform.position = new Vector2(SpawnX, SpawnY);
+                m_Rigidbody2D.velocity = new Vector2(0f, 0f);
+				dedCheck.resetPlayer = false;
+                dedCheck.hit = false;
+                dedCheck.heathPlayer = dedCheck.heathPoints;
+                dedCheck.InvinciblityTimer = 0;
+            }
         }
-		if (InitiateWall && Wall && inWater == false && m_FacingRight == false)
-		{
-			if (wasWall && preWall == "right")
-			{
-				m_Rigidbody2D.AddForce(new Vector2(900f, 400f));
-			}
-			else
-			{
-                m_Rigidbody2D.AddForce(new Vector2(900f, 600f));
-            }
-			preWall = "right";
-			
-		}
-		if (InitiateWall && Wall && inWater == false && m_FacingRight == true)
-		{
-            if (wasWall && preWall == "left")
-            {
-                m_Rigidbody2D.AddForce(new Vector2(-900f, 400f));
-            }
-            else
-            {
-                m_Rigidbody2D.AddForce(new Vector2(-900f, 600f));
-            }
-			preWall = "left";
-
-		}
 	}
 
 

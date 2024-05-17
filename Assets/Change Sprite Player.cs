@@ -29,7 +29,7 @@ public class ChangeSpritePlayer : MonoBehaviour
     public Sprite dash;
     private bool inAirNoMove;
     private int inAirNoMoveCounter;
-    private int SwimCounter;
+    [SerializeField] private int SwimCounter;
     [SerializeField] private float walkXTotal;
     [SerializeField] private float swimXTotal;
     [SerializeField] private float walkXTotalStored;
@@ -51,19 +51,21 @@ public class ChangeSpritePlayer : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+
         // when you're in water, increse counter, and if you are in water and not in a swiming animation, swich to one.
         if (!controller.isGliding && !controller.inWater && !spriteRenderer.sprite == doubleJump && !spriteRenderer.sprite == GroundJump)
+            //Debug.Log(controller.inWater);
         if (controller.inWater)
         {
+                //Debug.Log("In it");
             SwimCounter = SwimCounter + 1;
             if (spriteRenderer.sprite != SwimJump && spriteRenderer.sprite != Swim1 && spriteRenderer.sprite != Swim2 && spriteRenderer.sprite != Swim3)
             {
                 spriteRenderer.sprite = Swim1;
             }
-        } else
+        } else if (!controller.inWater)
         {
-            SwimCounter = 0;
+            
         }
         if (!controller.inWater && controller.Wall && !controller.NoWallJump)
         {
