@@ -24908,6 +24908,7 @@ GameObject:
   m_Component:
   - component: {fileID: 652619834}
   - component: {fileID: 652619835}
+  - component: {fileID: 652619836}
   m_Layer: 5
   m_Name: bar bg
   m_TagString: Untagged
@@ -24984,6 +24985,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &652619836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652619833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efce4221de5c397409d75bd244c35521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Xchange: 220
+  Ychange: 70
+  objectTransform: {fileID: 652619834}
 --- !u!1 &653354850
 GameObject:
   m_ObjectHideFlags: 0
@@ -53315,7 +53331,7 @@ Transform:
   m_GameObject: {fileID: 1311775022}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 529.52997, y: 4, z: -10}
+  m_LocalPosition: {x: 529.53, y: 4, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -61357,7 +61373,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
+  m_UpdateRectTransformForStandalone: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -145536,6 +145552,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2059025431}
   - component: {fileID: 2059025430}
+  - component: {fileID: 2059025432}
   m_Layer: 0
   m_Name: Cover
   m_TagString: Untagged
@@ -145612,6 +145629,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1673011753}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2059025432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059025429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efce4221de5c397409d75bd244c35521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Xchange: 220
+  Ychange: 70
+  objectTransform: {fileID: 2059025431}
 --- !u!1 &2059390557
 GameObject:
   m_ObjectHideFlags: 0
@@ -145638,9 +145670,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059390557}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -960, y: 583, z: 0}
-  m_LocalScale: {x: 400, y: 100, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -960.0012, y: 583, z: 0}
+  m_LocalScale: {x: 399.99997, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1673011753}
@@ -145660,6 +145692,9 @@ MonoBehaviour:
   objectTransform: {fileID: 2059390558}
   Step: 0
   camera: {fileID: 1311775024}
+  Xchange: 220
+  Xchange2: -180
+  Ychange: 70
 --- !u!212 &2059390560
 SpriteRenderer:
   m_ObjectHideFlags: 0

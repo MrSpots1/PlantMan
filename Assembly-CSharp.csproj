@@ -75,6 +75,7 @@
     <Compile Include="Assets\Enemy movement air.cs" />
     <Compile Include="Assets\Falling stones.cs" />
     <Compile Include="Assets\SaveLoad.cs" />
+    <Compile Include="Assets\UI screen thing.cs" />
     <Compile Include="Assets\Flower sprite.cs" />
     <Compile Include="Assets\CharacterController2D.cs" />
     <Compile Include="Assets\Enemy Kill.cs" />
