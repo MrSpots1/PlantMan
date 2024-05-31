@@ -19,9 +19,9 @@ public class EnemyKill : MonoBehaviour
     {
         //Debug.Log(ME + "Me");
         //Debug.Log(movement.DeathObject + "later game obj");
-        if (movement.DeathObject == ME)
+        if (movement.DeathObject == ME && !movement.killerObject == THEM && movement.veloY < 0)
         {
-            Destroy(THEM, 0f);
+            THEM.SetActive(false);
         }
     }
 }

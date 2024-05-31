@@ -75,6 +75,7 @@
     <Compile Include="Assets\Enemy movement air.cs" />
     <Compile Include="Assets\Falling stones.cs" />
     <Compile Include="Assets\SaveLoad.cs" />
+    <Compile Include="Assets\Enemy Kill Lion.cs" />
     <Compile Include="Assets\UI screen thing.cs" />
     <Compile Include="Assets\Flower sprite.cs" />
     <Compile Include="Assets\CharacterController2D.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Assets\Enemyy movement fire main.cs" />
     <Compile Include="Assets\Enemy movement sheep.cs" />
     <Compile Include="Assets\Master controler.cs" />
+    <Compile Include="Assets\Enemy Movement Lion.cs" />
     <Compile Include="Assets\speed game.cs" />
     <Compile Include="Assets\Enemy movement simple.cs" />
     <Compile Include="Assets\Death.cs" />

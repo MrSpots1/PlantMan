@@ -61,14 +61,7 @@ public class PlayerMovement : MonoBehaviour {
 			Debug.Log(fly);
         }
 
-		if (Input.GetButtonDown("Crouch"))
-		{
-			_crouch = true;
-		}
-		else if (Input.GetButtonUp("Crouch"))
-		{
-			_crouch = false;
-		}
+		
 
 		if (Input.GetButtonDown("Dash"))
 		{
