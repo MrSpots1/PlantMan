@@ -62,7 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Smooth Camera Follow.cs" />
+    <Compile Include="Assets\Button Scripts\Button State Varie.cs" />
     <Compile Include="Assets\Enemy movement goat.cs" />
+    <Compile Include="Assets\Cover Image.cs" />
+    <Compile Include="Assets\Button Scripts\ButtonsSettings.cs" />
+    <Compile Include="Assets\Button Scripts\Settings Close.cs" />
+    <Compile Include="Assets\Button Scripts\LevelReqBtn.cs" />
     <Compile Include="Assets\bird sprite.cs" />
     <Compile Include="Assets\Pausing.cs" />
     <Compile Include="Assets\Collectables.cs" />
@@ -70,12 +75,16 @@
     <Compile Include="Assets\VineAnimation.cs" />
     <Compile Include="Assets\PlayerMovement.cs" />
     <Compile Include="Assets\Change Sprite Player.cs" />
+    <Compile Include="Assets\FinishBonus.cs" />
     <Compile Include="Assets\Checkpoint.cs" />
     <Compile Include="Assets\Enemy movement fire spread.cs" />
+    <Compile Include="Assets\Button Scripts\Resume Button.cs" />
     <Compile Include="Assets\Enemy movement air.cs" />
+    <Compile Include="Assets\Enemy Mobement Boulder.cs" />
     <Compile Include="Assets\Falling stones.cs" />
     <Compile Include="Assets\SaveLoad.cs" />
     <Compile Include="Assets\Enemy Kill Lion.cs" />
+    <Compile Include="Assets\Button Scripts\Glide Toggle.cs" />
     <Compile Include="Assets\UI screen thing.cs" />
     <Compile Include="Assets\Flower sprite.cs" />
     <Compile Include="Assets\CharacterController2D.cs" />
@@ -84,14 +93,18 @@
     <Compile Include="Assets\Finish.cs" />
     <Compile Include="Assets\Game.cs" />
     <Compile Include="Assets\heath bar.cs" />
+    <Compile Include="Assets\Button Scripts\WorldReqBtn.cs" />
     <Compile Include="Assets\Change Sprite Sheep.cs" />
     <Compile Include="Assets\Enemyy movement fire main.cs" />
+    <Compile Include="Assets\Button Scripts\Glide Button.cs" />
     <Compile Include="Assets\Enemy movement sheep.cs" />
     <Compile Include="Assets\Master controler.cs" />
+    <Compile Include="Assets\Heath Gain.cs" />
     <Compile Include="Assets\Enemy Movement Lion.cs" />
     <Compile Include="Assets\speed game.cs" />
     <Compile Include="Assets\Enemy movement simple.cs" />
     <Compile Include="Assets\Death.cs" />
+    <Compile Include="Assets\Cover Map.cs" />
     <Compile Include="Assets\Level Button.cs" />
     <Compile Include="Assets\GameData.cs" />
     <Compile Include="Assets\Timer.cs" />
@@ -115,6 +128,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\MainView.uxml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />

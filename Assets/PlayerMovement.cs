@@ -16,10 +16,13 @@ public class PlayerMovement : MonoBehaviour {
 	public bool _dash = false;
 	public bool _initiateWall = false;
 	public bool fly = false;
+	[SerializeField] public bool glideSettings = false;
 	// Update is called once per frame
 	void Update ()
 	{
-		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+
+       
+        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         verticalMove = Input.GetAxisRaw("Vertical") * runSpeed;
         if (Input.GetButtonDown("Jump"))
 		{
@@ -36,17 +39,34 @@ public class PlayerMovement : MonoBehaviour {
 				_initiateWall = true;
 			}
 		}
-		
-		if (Input.GetButtonDown("Glide") /*&& ableGlide*/)
+
+
+		if (glideSettings)
 		{
-			if (_glide == true)
+			if (Input.GetButtonDown("Glide") /*&& ableGlide*/)
 			{
-				_glide = false;
-			} else if (_glide == false)
+				if (_glide == true)
+				{
+					_glide = false;
+				}
+				else if (_glide == false)
+				{
+					_glide = true;
+				}
+			}
+		}
+		else if (!glideSettings)
+		{
+			if (Input.GetButtonDown("Glide") /*&& ableGlide*/)
 			{
 				_glide = true;
 			}
+			else if (Input.GetButtonUp("Glide"))
+			{
+				_glide = false;
+			}
 		}
+		
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
 			

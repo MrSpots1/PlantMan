@@ -39,6 +39,7 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] public float sandFallSpead;
 	[SerializeField] public float sandSpeed;
 	[SerializeField] public float windAmount;
+	[SerializeField] public bool Invincible;
 
 	public GameObject DeathObject;
     public GameObject killerObject;
@@ -50,6 +51,7 @@ public class CharacterController2D : MonoBehaviour
 	public UnityEngine.GameObject colliderice;
 	public UnityEngine.GameObject colliderIce2;
 	public UnityEngine.GameObject colliderIce3;
+    [SerializeField] private int noThanksWallStop;
 
 	public Death dedCheck;
 
@@ -332,14 +334,17 @@ public class CharacterController2D : MonoBehaviour
 			if (deathColliders[i].gameObject != gameObject)
 			{
 				killerObject = deathColliders[i].gameObject;
-				
-				if (deathColliders[i].gameObject.layer == 12)
+				if (!Invincible)
 				{
-					dedCheck._ded = true;
-				}
-				else if (deathColliders[i].gameObject.layer == 8)
-				{
-					dedCheck.hit = true;
+
+					if (deathColliders[i].gameObject.layer == 12)
+					{
+						dedCheck._ded = true;
+					}
+					else if (deathColliders[i].gameObject.layer == 8)
+					{
+						dedCheck.hit = true;
+					}
 				}
 
 			}
@@ -418,6 +423,7 @@ public class CharacterController2D : MonoBehaviour
 		{
 			NoWallJump = false;
 		}
+		noThanksWallStop--;
 	}
 
 
@@ -463,11 +469,12 @@ public class CharacterController2D : MonoBehaviour
 			{
 				m_Rigidbody2D.gravityScale = 1;
 			}
-			else if (Wall == true && NoWallJump == false)
+			else if (Wall == true && NoWallJump == false && noThanksWallStop <0)
 			{
 				m_Rigidbody2D.gravityScale = 0;
 				m_Rigidbody2D.velocity = new Vector2(0f, -1f);
 				groundCount = 0;
+				Debug.Log("yes");
 			}
 			else if (glide == true && m_Rigidbody2D.velocity.y < 0 && (Wall == false || Wall == true && NoWallJump))
 			{
@@ -587,6 +594,8 @@ public class CharacterController2D : MonoBehaviour
 			}
 			if (InitiateWall && Wall && inWater == false && m_FacingRight == false && !onSand && lastSurface != "sand")
 			{
+				Debug.Log("bonk");
+				noThanksWallStop = 1;
 				if (wasWall && preWall == "right")
 				{
 					m_Rigidbody2D.AddForce(new Vector2(900f, 400f));
@@ -595,12 +604,17 @@ public class CharacterController2D : MonoBehaviour
 				{
 					m_Rigidbody2D.AddForce(new Vector2(900f, 600f));
 				}
-				preWall = "right";
 
-			}
+				preWall = "right";
+                Wall = false;
+
+            }
 			if (InitiateWall && Wall && inWater == false && m_FacingRight == true && !onSand && lastSurface != "sand")
 			{
-				if (wasWall && preWall == "left")
+                Debug.Log("bonk");
+				noThanksWallStop = 1;
+
+                if (wasWall && preWall == "left")
 				{
 					m_Rigidbody2D.AddForce(new Vector2(-900f, 400f));
 				}
@@ -609,7 +623,7 @@ public class CharacterController2D : MonoBehaviour
 					m_Rigidbody2D.AddForce(new Vector2(-900f, 600f));
 				}
 				preWall = "left";
-
+				Wall = false;
 			}
 			if (!sandJump && onSand)
 			{

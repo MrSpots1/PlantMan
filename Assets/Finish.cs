@@ -38,7 +38,12 @@ public class Finish : MonoBehaviour
                     MainPlayerScript.SpawnX = posX;
                     MainPlayerScript.SpawnY = posY;
                     deadCheck._ded = true;
-                    mastercontroler.level = 2;
+                    mastercontroler.state = 4;
+                    mastercontroler.activateMenus = true;
+                    if (mastercontroler.level == mastercontroler.latestLevel)
+                    {
+                        mastercontroler.level++;
+                    }
                     ME.SetActive(false);
                     mastercontroler.beatLevel = true;
                 }

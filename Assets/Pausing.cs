@@ -10,21 +10,23 @@ public class Pausing : MonoBehaviour
         
     }
 public bool gamePaused;
+public bool justPaused;
+public bool justUnpaused;
+    [SerializeField] public Mastercontroler mastercontroler;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && mastercontroler.state == 0)
         {
-            if (gamePaused)
+            
+             if (!gamePaused)
             {
-                gamePaused=false;
+                gamePaused = true;
                 Time.timeScale = 0f;
-            }
-            else if (gamePaused==false)
-            {
-                gamePaused=true;
-                Time.timeScale = 1f;
+                justPaused = true;
+                mastercontroler.state = 2;
+                mastercontroler.activateMenus = true;
             }
         }
     }
