@@ -61,11 +61,13 @@
     <Analyzer Include="C:\Users\tjder\Unity\2023.2.5f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Button Scripts\ContinueButton.cs" />
     <Compile Include="Assets\Smooth Camera Follow.cs" />
     <Compile Include="Assets\Button Scripts\Button State Varie.cs" />
     <Compile Include="Assets\Enemy movement goat.cs" />
     <Compile Include="Assets\Cover Image.cs" />
     <Compile Include="Assets\Button Scripts\ButtonsSettings.cs" />
+    <Compile Include="Assets\Button Scripts\Progress and Credits Text.cs" />
     <Compile Include="Assets\Button Scripts\Settings Close.cs" />
     <Compile Include="Assets\Button Scripts\LevelReqBtn.cs" />
     <Compile Include="Assets\bird sprite.cs" />
@@ -74,10 +76,14 @@
     <Compile Include="Assets\Enemy movement falling.cs" />
     <Compile Include="Assets\VineAnimation.cs" />
     <Compile Include="Assets\PlayerMovement.cs" />
+    <Compile Include="Assets\Button Scripts\NewButton.cs" />
     <Compile Include="Assets\Change Sprite Player.cs" />
     <Compile Include="Assets\FinishBonus.cs" />
+    <Compile Include="Assets\Vine Enemy Movement.cs" />
+    <Compile Include="Assets\Button Scripts\Exit Button.cs" />
     <Compile Include="Assets\Checkpoint.cs" />
     <Compile Include="Assets\Enemy movement fire spread.cs" />
+    <Compile Include="Assets\FileWorker.cs" />
     <Compile Include="Assets\Button Scripts\Resume Button.cs" />
     <Compile Include="Assets\Enemy movement air.cs" />
     <Compile Include="Assets\Enemy Mobement Boulder.cs" />

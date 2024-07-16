@@ -15,6 +15,7 @@ public class Finish : MonoBehaviour
     [SerializeField] float posX;
     [SerializeField] float posY;
     [SerializeField] private GameObject ME;
+    [SerializeField] private int Change;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +23,11 @@ public class Finish : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
 
     }
-
+    private void OnDisable()
+    {
+        UnityEngine.Debug.Log("start");
+        Invoke(nameof(Restore), 5f);
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -40,15 +45,22 @@ public class Finish : MonoBehaviour
                     deadCheck._ded = true;
                     mastercontroler.state = 4;
                     mastercontroler.activateMenus = true;
-                    if (mastercontroler.level == mastercontroler.latestLevel)
+                    if (mastercontroler.level == Change-1)
                     {
-                        mastercontroler.level++;
+                        mastercontroler.latestLevel = Change;
                     }
-                    ME.SetActive(false);
+                    
                     mastercontroler.beatLevel = true;
+                    mastercontroler.saveGame = true;
+                    ME.SetActive(false);
+                    
                 }
             }
 
         }
+    }
+    void Restore()
+    {
+        ME.SetActive(true);
     }
 }

@@ -53,11 +53,11 @@ public class ChangeSpritePlayer : MonoBehaviour
     {
 
         // when you're in water, increse counter, and if you are in water and not in a swiming animation, swich to one.
-        if (!controller.isGliding && !controller.inWater && !spriteRenderer.sprite == doubleJump && !spriteRenderer.sprite == GroundJump)
+    
             //Debug.Log(controller.inWater);
         if (controller.inWater)
         {
-                //Debug.Log("In it");
+                Debug.Log("In it");
             SwimCounter = SwimCounter + 1;
             if (spriteRenderer.sprite != SwimJump && spriteRenderer.sprite != Swim1 && spriteRenderer.sprite != Swim2 && spriteRenderer.sprite != Swim3)
             {

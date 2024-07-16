@@ -18,6 +18,16 @@ public class Collectables : MonoBehaviour
     public string collectableState;
     public SpriteRenderer spriteRenderer2;
     // Start is called before the first frame update
+    private void OnDisable()
+    {
+        if (mastercontroler.leaveLevel && collectableState == "Stasis")
+        {
+            collectableState = "Uncollected";
+            spriteRenderer2.enabled = true;
+            mastercontroler.leaveLevel = false;
+        }
+        
+    }
     void Start()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -47,10 +57,6 @@ public class Collectables : MonoBehaviour
                     spriteRenderer2.enabled = false;
                 }
             }
-        }
-        if (mastercontroler.leaveLevel && collectableState == "Stasis")
-        {
-            collectableState = "Uncollected";
         }
         if (collectableState == "Stasis" && mastercontroler.beatLevel)
         {
@@ -109,4 +115,5 @@ public class Collectables : MonoBehaviour
 
 
     }
+    
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Death : MonoBehaviour
 {
     public Mastercontroler mastercontroler;
+    
     public bool _ded
     {
         get;
@@ -93,9 +94,14 @@ public class Death : MonoBehaviour
             heathbar.Step = 0;
         }
 
+
     }
     void Update()
     {
+        if (mastercontroler.leaveLevel)
+        {
+            _ded = true;
+        }
         if (_ded)
         {
             mastercontroler.activateLevel = true;
@@ -103,6 +109,7 @@ public class Death : MonoBehaviour
             heathPlayer = heathPoints;
             InvinciblityTimer = 0;
             resetPlayer = true;
+            
         }
         _ded = false; // you died
         

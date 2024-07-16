@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
-using UnityEditor.Playables;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Tilemaps;
@@ -9,6 +10,7 @@ using UnityEngine.UI;
 
 public class Mastercontroler : MonoBehaviour
 {
+    
     [SerializeField] public int state = 1;
     [SerializeField] public int level = 1;
     [SerializeField] public int world = 1;
@@ -25,7 +27,6 @@ public class Mastercontroler : MonoBehaviour
     [SerializeField] GameObject MainMenuButtons;
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject SettingsButtons;
-    [SerializeField] GameObject ProgressStuff;
     [SerializeField] GameObject CreditsFromButton;
     [SerializeField] GameObject CreditsFromCompletion;
     [SerializeField] GameObject PlantManBird;
@@ -63,6 +64,8 @@ public class Mastercontroler : MonoBehaviour
     [SerializeField] public int totalCollectables;
     public bool activateMenus;
     public int mapState = 1;
+    public bool saveGame;
+    public bool loadGame;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,15 +73,30 @@ public class Mastercontroler : MonoBehaviour
         activateMenus = true;
         Time.timeScale = 0f;
         pause.gamePaused = true;
+        
+        
     }
 
     // Update is called once per frame
     
     void Update()
     {
+        
         if (level > latestLevel)
         {
             latestLevel = level;
+        }
+        if (saveGame)
+        {
+            saveGame = false;
+            SaveData();
+
+        }
+        if (loadGame)
+        {
+            loadGame = false; 
+            LoadData();
+
         }
         
         percent = ((latestLevel - 1)*2) + totalCollectables*2;
@@ -138,8 +156,12 @@ public class Mastercontroler : MonoBehaviour
                 DeactivateSettings();
                 DeactivateWorldMap();
                 ActivateTitleScreen();
+                DeactivateCredits();
             } else if (state == 4)
             {
+                DeactivateLevel1();
+                DeactivateLevel2();
+                DeactivateLevel3();
                 DeactivatePauseMenu();
                 DeactivateSettings();
                 DeactivateTitleScreen();
@@ -198,6 +220,11 @@ public class Mastercontroler : MonoBehaviour
             {
                 DeactivateWorldMap();
                 ActivateLevelSelect8();
+            }
+            else if (state == 13)
+            {
+                DeactivateTitleScreen();
+                ActivateCredits();
             }
         }
         if (activateLevel)
@@ -376,5 +403,67 @@ public class Mastercontroler : MonoBehaviour
     void DeactivateLevelSelect8()
     {
 
+    }
+    void ActivateCredits()
+    {
+        CreditsFromButton.SetActive(true);
+    }
+    void DeactivateCredits()
+    {
+        CreditsFromButton.SetActive(false);
+    }
+
+    void SaveData()
+    {
+        
+        var saveData = new SaveData()
+        {
+            Level = latestLevel,
+            collectable1 = world1Collectable,
+            collectable2 = world2Collectable,
+            collectable3 = world3Collectable,
+            collectable4 = world4Collectable,
+            collectable5 = world5Collectable,
+            collectable6 = world6Collectable,
+            collectable7 = world7Collectable,
+            collectable8 = world8Collectable,
+            collectablebonus1 = bonus1Collectable,
+            collectablebonus2 = bonus2Collectable,
+            collectablebonus3 = bonus3Collectable,
+            collectablebonus4 = bonus4Collectable,
+            bonus1 = bonus1complete,
+            bonus2 = bonus2complete,
+            bonus3 = bonus3complete,
+            bonus4 = bonus4complete
+        };
+        var helper = new FileWorker();
+        helper.WriteContent("saveData.txt", saveData);
+        LoadData();
+        Debug.Log("doing the thing");
+        
+    }
+    void LoadData()
+    {
+        
+            var helper = new FileWorker();
+            var readData = helper.ReadContent("saveData.txt");
+            latestLevel = readData.Level;
+            world1Collectable = readData.collectable1;
+            world2Collectable = readData.collectable2;
+            world3Collectable = readData.collectable3;
+            world4Collectable = readData.collectable4;
+            world5Collectable = readData.collectable5;
+            world6Collectable = readData.collectable6;
+            world7Collectable = readData.collectable7;
+            world8Collectable = readData.collectable8;
+            bonus1Collectable = readData.collectablebonus1;
+            bonus2Collectable = readData.collectablebonus2;
+            bonus3Collectable = readData.collectablebonus3;
+            bonus4Collectable = readData.collectablebonus4;
+            bonus1complete = readData.bonus1;
+            bonus2complete = readData.bonus2;
+            bonus3complete = readData.bonus3;
+            bonus4complete = readData.bonus4;
+        
     }
 }

@@ -13,6 +13,8 @@ public class EnemyMovementLion : MonoBehaviour
     [SerializeField] private LayerMask m_WhatIsGround;
     [SerializeField] private Transform m_LeftCheck;
     [SerializeField] private Transform m_RightCheck;
+    [SerializeField] private Transform m_LeftCheck1;
+    [SerializeField] private Transform m_RightCheck1;
     [SerializeField] private float spawnX = 0f;
     [SerializeField] private float spawnY = 0f;
     [SerializeField] public int heath = 2;
@@ -45,6 +47,19 @@ public class EnemyMovementLion : MonoBehaviour
             }
 
         }
+        Collider2D[] collidersLeft1 = Physics2D.OverlapCircleAll(m_LeftCheck1.position, k_TouchingRadius, m_WhatIsGround);
+        //Debug.Log($"collidersLeft.Length: {collidersLeft.Length}");
+        for (int i = 0; i < collidersLeft1.Length; i++)
+        {
+            //Debug.Log($"left check: {collidersLeft[i].gameObject}");
+            //Debug.Log($"gameObject {gameObject}");
+            if (collidersLeft1[i].gameObject != gameObject)
+            {
+                goingRight = true;
+                //Debug.Log("Right");
+            }
+
+        }
 
         //Debug.Log($"m_RightCheck.position: {m_RightCheck.position}");
         Collider2D[] collidersRight = Physics2D.OverlapCircleAll(m_RightCheck.position, k_TouchingRadius, m_WhatIsGround);
@@ -54,6 +69,19 @@ public class EnemyMovementLion : MonoBehaviour
             //Debug.Log($"right check: {collidersRight[i].gameObject}");
             //Debug.Log($"gameObject {gameObject}");
             if (collidersRight[i].gameObject != gameObject)
+            {
+                goingRight = false;
+                //Debug.Log("Left");
+            }
+
+        }
+        Collider2D[] collidersRight1 = Physics2D.OverlapCircleAll(m_RightCheck1.position, k_TouchingRadius, m_WhatIsGround);
+        //Debug.Log($"collidersRight.Length: {collidersRight.Length}");
+        for (int i = 0; i < collidersRight1.Length; i++)
+        {
+            //Debug.Log($"right check: {collidersRight[i].gameObject}");
+            //Debug.Log($"gameObject {gameObject}");
+            if (collidersRight1[i].gameObject != gameObject)
             {
                 goingRight = false;
                 //Debug.Log("Left");

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CharacterController2D : MonoBehaviour
@@ -88,22 +89,56 @@ public class CharacterController2D : MonoBehaviour
 	public bool NoWallJump;
 	public bool isGliding;
 	public int sandTimer;
+    public List<Collider2D> currentTriggers = new List<Collider2D>();
 
 
-	// this is an example of exposing a public property that exposes the veritical velocity to methods that have access to instances of this class
-	// public float VerticalVelocity
-	// {
-	//    get { return m_Rigidbody2D.velocity.y; }
-	// }
+    // this is an example of exposing a public property that exposes the veritical velocity to methods that have access to instances of this class
+    // public float VerticalVelocity
+    // {
+    //    get { return m_Rigidbody2D.velocity.y; }
+    // }
 
-	private void Awake()
+    private void Awake()
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 	}
+    void OnTriggerEnter2D(Collider2D col)
+    {
 
+        // Add the GameObject collided with to the list.
+        currentTriggers.Add(col);
+        foreach (Collider2D gObject in currentTriggers)
+        {
+            Debug.Log(gObject.name);
+        }
+    }
+    
+    void OnTriggerExit2D(Collider2D col)
+    {
 
-	private void FixedUpdate()
+        // Remove the GameObject collided with from the list.
+        currentTriggers.Remove(col);
+        foreach (Collider2D gObject in currentTriggers)
+        {
+            Debug.Log(gObject.name);
+        }
+    }
+    
+    private void FixedUpdate()
 	{
+		foreach (Collider2D gObject in currentTriggers)
+		{
+			
+            if (gObject.gameObject.layer == 12)
+            {
+                dedCheck._ded = true;
+            }
+            else if (gObject.gameObject.layer == 8 && dedCheck.hit == false)
+            {
+                dedCheck.hit = true;
+            }
+            
+		}
 		veloX = m_Rigidbody2D.velocity.x;
 		veloY = m_Rigidbody2D.velocity.y;
 		posX = m_Rigidbody2D.transform.position.x;
@@ -299,7 +334,7 @@ public class CharacterController2D : MonoBehaviour
 				sandTimer++;
 			}
 		}
-
+		
 		Collider2D[] Sand3 = Physics2D.OverlapCircleAll(m_GroundCheck3.position, k_GroundedRadius, m_WhatIsSand);
 		for (int i = 0; i < Sand3.Length; i++)
 		{
@@ -324,32 +359,8 @@ public class CharacterController2D : MonoBehaviour
 		}
 		//Debug.Log("1: " + collider1 + " 2: " + collider2 + " 3: " + collider3 + " ice1: " + colliderice + " ice2: " + colliderIce2 + " ice3: " + colliderIce3);
 		// Check if the player has collided with Dead
-		Collider2D[] deathColliders = Physics2D.OverlapCircleAll(m_DeathCheck.position, k_DeadRadius, m_WhatIsDeath);
-		if (deathColliders.Length == 0)
-		{
-			killerObject = null;
-		}
-		for (int i = 0; i < deathColliders.Length; i++)
-		{
-			if (deathColliders[i].gameObject != gameObject)
-			{
-				killerObject = deathColliders[i].gameObject;
-				if (!Invincible)
-				{
-
-					if (deathColliders[i].gameObject.layer == 12)
-					{
-						dedCheck._ded = true;
-					}
-					else if (deathColliders[i].gameObject.layer == 8)
-					{
-						dedCheck.hit = true;
-					}
-				}
-
-			}
-			
-		}
+		
+		
 		
 		Collider2D[] killColliders = Physics2D.OverlapCircleAll(m_KillCheck.position, k_DeadRadius, m_WhatIsToKill);
         if (killColliders.Length == 0)
@@ -361,9 +372,13 @@ public class CharacterController2D : MonoBehaviour
 
 			if (killColliders[i].gameObject != gameObject)
 			{
-				Debug.Log(killColliders[i].gameObject + "orig game object");
-				DeathObject = killColliders[i].gameObject;
-			}
+				if (m_Rigidbody2D.velocity.y < 0)
+				{
+					Debug.Log(killColliders[i].gameObject + "orig game object");
+					DeathObject = killColliders[i].gameObject;
+					m_Rigidbody2D.AddForce(new Vector2(0f, 600f));
+				}
+            }
 		}
 
 		//Check if the player is touching the left wall
@@ -653,7 +668,7 @@ public class CharacterController2D : MonoBehaviour
 				dedCheck.resetPlayer = false;
 				dedCheck.hit = false;
 				dedCheck.heathPlayer = dedCheck.heathPoints;
-				dedCheck.InvinciblityTimer = 0;
+				dedCheck.InvinciblityTimer = 40;
 			}
 		}
 	}
