@@ -5,7 +5,6 @@ using UnityEngine;
 public class HeathGain : MonoBehaviour
 {
     [SerializeField] public int world;
-    [SerializeField] private int gravTimer = 0;
     const float k_TouchingRadius = 0.5f;
     private Rigidbody2D m_Rigidbody2D;
     [SerializeField] private LayerMask m_WhatIsPlayer;

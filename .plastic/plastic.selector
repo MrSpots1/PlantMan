@@ -1,0 +1,4 @@
+repository "Plant Man@MrSpots@cloud"
+  path "/"
+    br "/main"
+    co "/main"

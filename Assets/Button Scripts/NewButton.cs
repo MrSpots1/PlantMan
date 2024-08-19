@@ -22,6 +22,7 @@ public class NewButton : MonoBehaviour
     {
         mastercontroler.state = VariableState;
         mastercontroler.activateMenus = true;
+        mastercontroler.newGame = true;
 
     }
 }

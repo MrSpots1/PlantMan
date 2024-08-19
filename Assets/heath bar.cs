@@ -10,7 +10,7 @@ public class heathbar : MonoBehaviour
     public Transform objectTransform;
     
     public float Step;
-    public Transform camera;
+    
     [SerializeField] public float Xchange;
     [SerializeField] public float Xchange2;
     

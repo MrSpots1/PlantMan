@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class CharacterController2D : MonoBehaviour
 {
@@ -24,14 +25,14 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private Transform m_GroundCheck3;
 	[SerializeField] private Transform m_DeathCheck;
 	[SerializeField] private Transform m_LeftWallCheck;
-	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
+    [SerializeField] private Transform m_LeftWallCheck2;
+    [SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
 	[SerializeField] private Transform m_KillCheck;
 	[SerializeField] private Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
-	[SerializeField] private bool m_Grounded;
+	[SerializeField] public bool m_Grounded;
 	[SerializeField] public bool inWater;
 	[SerializeField] public bool doubleJumpNext;
 	[SerializeField] private string lastSurface;
-	[SerializeField] private bool onIce;
 	[SerializeField] public float SpawnX;
 	[SerializeField] public float SpawnY;
 	[SerializeField] public bool onSand;
@@ -43,8 +44,8 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] public bool Invincible;
 
 	public GameObject DeathObject;
-    public GameObject killerObject;
-    private bool wasWall;
+	public GameObject killerObject;
+	private bool wasWall;
 	string preWall;
 	public UnityEngine.GameObject collider1;
 	public UnityEngine.GameObject collider2;
@@ -52,7 +53,7 @@ public class CharacterController2D : MonoBehaviour
 	public UnityEngine.GameObject colliderice;
 	public UnityEngine.GameObject colliderIce2;
 	public UnityEngine.GameObject colliderIce3;
-    [SerializeField] private int noThanksWallStop;
+	[SerializeField] private int noThanksWallStop;
 
 	public Death dedCheck;
 
@@ -69,8 +70,7 @@ public class CharacterController2D : MonoBehaviour
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 velocity = Vector3.zero;
 	public bool Wall = false;
-	private bool leftInitiated = false;
-	private bool rightInitiated = false;
+	
 	private bool _canJump = false;
 	private bool checkValues = false;
 	private bool canDash = false;
@@ -82,14 +82,20 @@ public class CharacterController2D : MonoBehaviour
 	public bool runDoubleJumpAnimation;
 	public float posX;
 	public float posY;
-    public float veloX;
-    public float veloY;
-    private bool left;
+	public float veloX;
+	public float veloY;
+	private bool left;
 	private bool right;
 	public bool NoWallJump;
 	public bool isGliding;
 	public int sandTimer;
-    public List<Collider2D> currentTriggers = new List<Collider2D>();
+	public List<Collider2D> currentTriggers = new List<Collider2D>();
+	
+	public AudioClip JumpSound;
+	public AudioClip DoubleJumpSound;
+    
+    private IEnumerator coroutine;
+	[SerializeField] Volumecontrol volumecontrol;
 
 
     // this is an example of exposing a public property that exposes the veritical velocity to methods that have access to instances of this class
@@ -101,7 +107,12 @@ public class CharacterController2D : MonoBehaviour
     private void Awake()
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
-	}
+        volumecontrol.Volume = 1f;
+        volumecontrol.SFX = 0.2f;
+        volumecontrol.SFXSlider.value = 20;
+        volumecontrol.Music = 1f;
+        
+    }
     void OnTriggerEnter2D(Collider2D col)
     {
 
@@ -109,7 +120,7 @@ public class CharacterController2D : MonoBehaviour
         currentTriggers.Add(col);
         foreach (Collider2D gObject in currentTriggers)
         {
-            Debug.Log(gObject.name);
+            
         }
     }
     
@@ -120,7 +131,7 @@ public class CharacterController2D : MonoBehaviour
         currentTriggers.Remove(col);
         foreach (Collider2D gObject in currentTriggers)
         {
-            Debug.Log(gObject.name);
+            
         }
     }
     
@@ -132,10 +143,12 @@ public class CharacterController2D : MonoBehaviour
             if (gObject.gameObject.layer == 12)
             {
                 dedCheck._ded = true;
+                
             }
             else if (gObject.gameObject.layer == 8 && dedCheck.hit == false)
             {
                 dedCheck.hit = true;
+                
             }
             
 		}
@@ -146,7 +159,7 @@ public class CharacterController2D : MonoBehaviour
 		//Debug.Log("FixedUpdate");
 		m_Grounded = false;
 		inWater = false;
-		onIce = false;
+		
 		onSand = false;
 
 
@@ -246,7 +259,7 @@ public class CharacterController2D : MonoBehaviour
 			{
 				colliderice = iceColliders1[i].gameObject;
 				// the character is touching ice in the middle of the square
-				onIce = true;
+				
 				groundCount = 6;
 				canDash = true;
 				m_Grounded = true;
@@ -266,7 +279,7 @@ public class CharacterController2D : MonoBehaviour
 			{
 				colliderIce2 = iceColliders2[i].gameObject;
 				// the character is touching ice in the right of the square
-				onIce = true;
+				
 				groundCount = 6;
 				canDash = true;
 				m_Grounded = true;
@@ -285,7 +298,7 @@ public class CharacterController2D : MonoBehaviour
 			{
 				colliderIce3 = iceColliders3[i].gameObject;
 				// the character is touching ice in the left of the square
-				onIce = true;
+				
 				groundCount = 6;
 				canDash = true;
 				m_Grounded = true;
@@ -374,7 +387,7 @@ public class CharacterController2D : MonoBehaviour
 			{
 				if (m_Rigidbody2D.velocity.y < 0)
 				{
-					Debug.Log(killColliders[i].gameObject + "orig game object");
+					//Debug.Log(killColliders[i].gameObject + "orig game object");
 					DeathObject = killColliders[i].gameObject;
 					m_Rigidbody2D.AddForce(new Vector2(0f, 600f));
 				}
@@ -405,8 +418,30 @@ public class CharacterController2D : MonoBehaviour
 			}
 
 		}
-		// set values
-		if (m_Grounded == false && checkValues)
+        Collider2D[] leftColliders1 = Physics2D.OverlapCircleAll(m_LeftWallCheck2.position, k_WallRadius, m_WhatIsGround);
+        for (int i = 0; i < leftColliders1.Length; i++)
+        {
+            if (leftColliders1[i].gameObject != gameObject)
+            {
+                Wall = true;
+                wasWall = true;
+                //Debug.Log("Right Wall");
+                if (m_FacingRight == true)
+                {
+                    left = true;
+                    right = false;
+                }
+                if (m_FacingRight == false)
+                {
+                    right = true;
+                    left = false;
+                }
+
+            }
+
+        }
+        // set values
+        if (m_Grounded == false && checkValues)
 		{
 			dashX = m_Rigidbody2D.velocity.x * 2;
 			dashY = m_Rigidbody2D.velocity.y;
@@ -422,8 +457,8 @@ public class CharacterController2D : MonoBehaviour
 		{
 			_canJump = false;
 		}
-		if (groundCount == 0 && Wall == false && wasWall == false)
-		{
+		if (groundCount == 0 && Wall == false && wasWall == false || groundCount == 0 && Wall == true && NoWallJump && wasWall == false)
+        {
 			doubleJumpNext = true;
 		}
 
@@ -489,7 +524,7 @@ public class CharacterController2D : MonoBehaviour
 				m_Rigidbody2D.gravityScale = 0;
 				m_Rigidbody2D.velocity = new Vector2(0f, -1f);
 				groundCount = 0;
-				Debug.Log("yes");
+				//Debug.Log("yes");
 			}
 			else if (glide == true && m_Rigidbody2D.velocity.y < 0 && (Wall == false || Wall == true && NoWallJump))
 			{
@@ -518,6 +553,7 @@ public class CharacterController2D : MonoBehaviour
 			//if dashing, and we can dash, dash
 			if (dash && canDash && m_Grounded == false && inWater == false)
 			{
+				Debug.Log(dashY);
 				m_Rigidbody2D.velocity = new Vector2(dashX, dashY);
 				canDash = false;
 				runDashAnimation = true;
@@ -582,26 +618,54 @@ public class CharacterController2D : MonoBehaviour
 				_canJump = false;
 				groundCount = 0;
 				m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-				Debug.Log("normalJump");
+				//Debug.Log("normalJump");
 				doubleJumpNext = true;
 				runGroundJumpAnimation = true;
+				GameObject newGameObject = new GameObject();
+				newGameObject.AddComponent<AudioSource>();
+				AudioSource audio = newGameObject.GetComponent<AudioSource>();
+				audio.clip = JumpSound;
+				audio.volume = volumecontrol.SFX;
+				audio.Play();
+				coroutine = SFXDestroy(newGameObject, 1f);
+				StartCoroutine(coroutine);
 
 
-			}
+
+
+
+
+            }
 			else if (jump && onSand)
 			{
 				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, sandJumpAmount);
 				sandJump = true;
 				Invoke(nameof(Pause), 0.1f);
-			}
+                GameObject newGameObject = new GameObject();
+                newGameObject.AddComponent<AudioSource>();
+                AudioSource audio = newGameObject.GetComponent<AudioSource>();
+                audio.clip = JumpSound;
+                audio.volume = volumecontrol.SFX;
+                audio.Play();
+                coroutine = SFXDestroy(newGameObject, 1f);
+                StartCoroutine(coroutine);
+            }
 
 			else if (inWater == false && doubleJumpNext && jump && !onSand && lastSurface != "sand")
 			{
 				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, doubleJumpForce);
 				doubleJumpNext = false;
-				Debug.Log("double jump");
+				//Debug.Log("double jump");
 				runDoubleJumpAnimation = true;
-			}
+                GameObject newGameObject = new GameObject();
+                newGameObject.AddComponent<AudioSource>();
+                AudioSource audio = newGameObject.GetComponent<AudioSource>();
+                audio.clip = DoubleJumpSound;
+                audio.volume = volumecontrol.SFX;
+                audio.Play();
+                coroutine = SFXDestroy(newGameObject, 1f);
+                StartCoroutine(coroutine);
+            }
 			else if (jump && inWater == true && !onSand && lastSurface != "sand")
 			{
 				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_WaterJumpForce);
@@ -609,7 +673,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 			if (InitiateWall && Wall && inWater == false && m_FacingRight == false && !onSand && lastSurface != "sand")
 			{
-				Debug.Log("bonk");
+				//Debug.Log("bonk");
 				noThanksWallStop = 1;
 				if (wasWall && preWall == "right")
 				{
@@ -622,12 +686,22 @@ public class CharacterController2D : MonoBehaviour
 
 				preWall = "right";
                 Wall = false;
+                GameObject newGameObject = new GameObject();
+                newGameObject.AddComponent<AudioSource>();
+                AudioSource audio = newGameObject.GetComponent<AudioSource>();
+                audio.clip = JumpSound;
+                audio.volume = volumecontrol.SFX;
+                audio.Play();
+                Flip();
+                coroutine = SFXDestroy(newGameObject, 1f);
+                StartCoroutine(coroutine);
 
             }
 			if (InitiateWall && Wall && inWater == false && m_FacingRight == true && !onSand && lastSurface != "sand")
 			{
-                Debug.Log("bonk");
+                //Debug.Log("bonk");
 				noThanksWallStop = 1;
+
 
                 if (wasWall && preWall == "left")
 				{
@@ -637,9 +711,18 @@ public class CharacterController2D : MonoBehaviour
 				{
 					m_Rigidbody2D.AddForce(new Vector2(-900f, 600f));
 				}
+				Flip();
 				preWall = "left";
 				Wall = false;
-			}
+                GameObject newGameObject = new GameObject();
+                newGameObject.AddComponent<AudioSource>();
+                AudioSource audio = newGameObject.GetComponent<AudioSource>();
+                audio.clip = JumpSound;
+                audio.volume = volumecontrol.SFX;
+                audio.Play();
+                coroutine = SFXDestroy(newGameObject, 1f);
+                StartCoroutine(coroutine);
+            }
 			if (!sandJump && onSand)
 			{
 				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, -sandFallSpead);
@@ -686,7 +769,7 @@ public class CharacterController2D : MonoBehaviour
 	}
 	void Pause()
 	{
-		Debug.Log("yes");
+		//Debug.Log("yes");
 		sandJump = false;
 	}
 	public List<Collider2D> currentCollisions = new List<Collider2D>();
@@ -698,7 +781,7 @@ public class CharacterController2D : MonoBehaviour
 		currentCollisions.Add(col.collider);
         foreach (Collider2D gObject in currentCollisions)
         {
-            Debug.Log(gObject.name);
+            //Debug.Log(gObject.name);
         }
     }
 	void OnCollisionExit2D(Collision2D col)
@@ -708,8 +791,13 @@ public class CharacterController2D : MonoBehaviour
         currentCollisions.Remove(col.collider);
         foreach (Collider2D gObject in currentCollisions)
         {
-            Debug.Log(gObject.name);
+            //Debug.Log(gObject.name);
         }
     }
+	private IEnumerator SFXDestroy(GameObject newgameobject, float waitTime)
+	{
+		yield return new WaitForSeconds(waitTime);
+		Destroy(newgameobject);
+	}
 }
 

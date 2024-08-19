@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Death : MonoBehaviour
 {
@@ -21,19 +22,41 @@ public class Death : MonoBehaviour
     [SerializeField] private SpriteRenderer SpriteRenderer;
     [SerializeField] private float gradient;
     [SerializeField] private heathbar heathbar;
+    public AudioClip DeathSound;
+    public AudioClip HurtSound;
+    private IEnumerator coroutine;
+    [SerializeField] Volumecontrol volumecontrol;
+    
+
 
     public int InvinciblityTimer;
+    private void Start()
+    {
+        
+    }
     void FixedUpdate()
     {
         heathPoints = mastercontroler.playerHitPoints;
         if (transform.position.y <= -4) {
             _ded = true;
+
         }
         if (hit && InvinciblityTimer == 0)
         {
             heathPlayer = heathPlayer - 1;
             InvinciblityTimer = 40;
             hit = false;
+            if (heathPlayer != 0)
+            {
+                GameObject newGameObject = new GameObject();
+                newGameObject.AddComponent<AudioSource>();
+                AudioSource audio = newGameObject.GetComponent<AudioSource>();
+                audio.clip = HurtSound;
+                audio.volume = volumecontrol.SFX;
+                audio.Play();
+                coroutine = SFXDestroy(newGameObject, 1f);
+                StartCoroutine(coroutine);
+            }
 
         }
         else if (hit)
@@ -107,11 +130,28 @@ public class Death : MonoBehaviour
             mastercontroler.activateLevel = true;
             hit = false;
             heathPlayer = heathPoints;
-            InvinciblityTimer = 0;
+            InvinciblityTimer = 40;
             resetPlayer = true;
-            
+            if (mastercontroler.state == 0)
+            {
+                GameObject newGameObject = new GameObject();
+                newGameObject.AddComponent<AudioSource>();
+                AudioSource audio = newGameObject.GetComponent<AudioSource>();
+                audio.clip = DeathSound;
+                audio.volume = (volumecontrol.SFX/1.05f);
+                audio.Play();
+                coroutine = SFXDestroy(newGameObject, 1f);
+                StartCoroutine(coroutine);
+            }
         }
         _ded = false; // you died
         
+    }
+    private IEnumerator SFXDestroy(GameObject newgameobject, float waitTime)
+    {
+        
+        
+        yield return new WaitForSeconds(waitTime);
+        Destroy(newgameobject);
     }
 }

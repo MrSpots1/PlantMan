@@ -7,10 +7,9 @@ public class Enemymovementsheep : MonoBehaviour
     public Death deadCheck;
     const float k_TouchingRadius = .05f;
     private float horizontalMove = 0f;
-    private bool goingRight = true;
+    
     private Rigidbody2D m_Rigidbody2D;
     [SerializeField] private Rigidbody2D PlayBody;
-    private Vector3 velocity = Vector3.zero;
     [SerializeField] private LayerMask m_WhatIsGround;
     [SerializeField] private LayerMask m_WhatIsPlayer;
     [SerializeField] private Transform m_LeftCheck;
@@ -19,11 +18,6 @@ public class Enemymovementsheep : MonoBehaviour
     [SerializeField] private GameObject ME;
     [SerializeField] private float spawnX = 0f;
     [SerializeField] private float spawnY = 0f;
-    private Vector2 Leftdirection = Vector2.left;
-    private Vector2 Rightdirection = Vector2.right;
-    private bool charging;
-    private bool startCharging;
-    private int chargeTimer;
     int x = 1;
 
     private void Awake()
@@ -37,7 +31,7 @@ public class Enemymovementsheep : MonoBehaviour
         if (deadCheck._ded)
         {
             transform.position = new Vector2(spawnX, spawnY);
-            goingRight = true;
+            
         }
         
 

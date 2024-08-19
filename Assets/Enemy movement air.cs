@@ -7,7 +7,7 @@ public class Enemymovementair : MonoBehaviour
     public Death deadCheck;
     const float k_TouchingRadius = .05f;
     private float horizontalMove = 0f;
-    private bool goingRight = false;
+    
     private Rigidbody2D m_Rigidbody2D;
     private Vector3 velocity = Vector3.zero;
     [SerializeField] private LayerMask m_WhatIsGround;

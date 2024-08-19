@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Text;
 using System;
 
-public class SaveData: MonoBehaviour
+public class SaveData
 {
     public int Level { get; set; }
     public bool collectable1 { get; set; }
@@ -25,7 +25,7 @@ public class SaveData: MonoBehaviour
     public bool bonus3 { get; set; }
     public bool bonus4 { get; set; }
 }
-public class FileWorker : MonoBehaviour
+public class FileWorker
 {
 
     public void WriteContent(string fileName, SaveData saveData)

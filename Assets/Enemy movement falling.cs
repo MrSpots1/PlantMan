@@ -8,8 +8,7 @@ public class Enemymovementfalling : MonoBehaviour
 {
     public Death deadCheck;
     const float k_TouchingRadius = .05f;
-    private float horizontalMove = 0f;
-    private bool goingRight = false;
+    
     private Rigidbody2D m_Rigidbody2D;
     [SerializeField] private Rigidbody2D PlayBody;
     private Vector3 velocity = Vector3.zero;
@@ -25,8 +24,7 @@ public class Enemymovementfalling : MonoBehaviour
     private int fallTimer;
     private float startX;
     private float startY;
-    private bool hitGround;
-    private int dieTimer;
+    
     private void Awake()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -44,7 +42,7 @@ public class Enemymovementfalling : MonoBehaviour
         if (deadCheck._ded)
         {
             transform.position = new Vector2(spawnX, spawnY);
-            goingRight = false;
+            
         }
         //Debug.Log($"m_LeftCheck.position: {m_LeftCheck.position}");
         Collider2D[] collidersLeft = Physics2D.OverlapCircleAll(m_LeftCheck.position, k_TouchingRadius, m_WhatIsGround);
@@ -58,8 +56,8 @@ public class Enemymovementfalling : MonoBehaviour
                 if (falling)
                 {
                     falling = false;
-                    hitGround = true;
-                    dieTimer = 0;
+                    
+                    
                     m_Rigidbody2D.position = new Vector2(startX, startY);
                     UnityEngine.Debug.Log("deactivatee");
                     ME.SetActive(false);
@@ -101,13 +99,13 @@ public class Enemymovementfalling : MonoBehaviour
     void Restore()
     {
         UnityEngine.Debug.Log("end");
-        hitGround = false;
+        
         m_Rigidbody2D.position = new Vector2(startX, startY);
         gameObject.layer = 12;
         ME.SetActive(true);
         gameObject.layer = 12;
         m_Rigidbody2D.position = new Vector2(startX, startY);
         gameObject.layer = 8;
-        dieTimer = 0;
+        
     }
 }

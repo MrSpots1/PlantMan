@@ -16,7 +16,7 @@ public class Finish : MonoBehaviour
     [SerializeField] float posY;
     [SerializeField] private GameObject ME;
     [SerializeField] private int Change;
-
+    
     // Start is called before the first frame update
     void Start()
     {

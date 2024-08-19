@@ -66,6 +66,7 @@ public class Mastercontroler : MonoBehaviour
     public int mapState = 1;
     public bool saveGame;
     public bool loadGame;
+    public bool newGame;
     // Start is called before the first frame update
     void Start()
     {
@@ -97,6 +98,30 @@ public class Mastercontroler : MonoBehaviour
             loadGame = false; 
             LoadData();
 
+        }
+        if (newGame)
+        {
+            newGame = false;
+            level = 1;
+            latestLevel = 1;
+            world1Collectable = false;
+            world2Collectable = false;
+            world3Collectable = false;
+            world4Collectable = false;
+            world5Collectable = false;
+            world6Collectable = false;
+            world7Collectable = false;
+            world8Collectable = false;
+            bonus1Collectable = false;
+            bonus2Collectable = false;
+            bonus3Collectable = false;
+            bonus4Collectable = false;
+            bonus1complete = false;
+            bonus2complete = false;
+            bonus3complete = false;
+            bonus4complete = false;
+            //resets world
+            
         }
         
         percent = ((latestLevel - 1)*2) + totalCollectables*2;

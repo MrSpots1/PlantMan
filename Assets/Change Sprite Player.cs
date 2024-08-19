@@ -38,6 +38,7 @@ public class ChangeSpritePlayer : MonoBehaviour
     public PlayerMovement buttons;
     public CharacterController2D controller;
     public string ActiveState;
+    
     void Start()
     {
         spriteRenderer.sprite = Idle1; 
@@ -100,7 +101,7 @@ public class ChangeSpritePlayer : MonoBehaviour
         }
         
         // if you are not moving up, down, left or right
-        if (-0.1f < m_Rigidbody2D.velocity.x && m_Rigidbody2D.velocity.x < 0.1f && m_Rigidbody2D.velocity.y == 0 && controller.inWater == false && controller.isGliding == false)
+        if (-0.1f < m_Rigidbody2D.velocity.x && m_Rigidbody2D.velocity.x < 0.1f && m_Rigidbody2D.velocity.y == 0 && controller.inWater == false && controller.isGliding == false || controller.m_Grounded && controller.inWater == false && controller.isGliding == false && controller.Wall && !controller.NoWallJump)
         {
             walkXTotalStored = walkXTotal;
             // increse idle counter
